@@ -19,7 +19,8 @@
     "@types/jsonwebtoken": "^9.0.7",
     "@types/bcrypt": "^5.0.2",
     "@prisma/client": "^6.2.1",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "@types/cors": "^2.8.17"
   },
   "dependencies": {
     "express": "^4.21.2",
@@ -31,7 +32,8 @@
     "routing-controllers": "^0.10.4",
     "reflect-metadata": "^0.2.2",
     "prisma": "^6.2.1",
-    "dotenv": "^16.4.7"
+    "dotenv": "^16.4.7",
+    "cors": "^2.8.5"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
