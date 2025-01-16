@@ -5,6 +5,8 @@ import { PostRepository } from '../repositories/post-repository';
 import { Authorize } from '../middleware/authorize';
 import { NotFoundEntityError } from '../errors/not-found-entity-error';
 import { PostModel } from '../models/post-model';
+import { UserModel } from '../models/user-model';
+import { AuthUser } from '../decorators/auth-user';
 
 
 @JsonController('/api/posts')
@@ -17,9 +19,9 @@ export class PostController {
 
 
     @Get()
-    async getAllAsync(@Res() response: Response): Promise<any> {
+    async getAllAsync( @Res() response: Response): Promise<any> {
         try {
-            const posts = this.postRepository.getAllAsync();
+            const posts = await this.postRepository.getAllAsync();
 
             return posts;
         }
@@ -30,12 +32,11 @@ export class PostController {
 
     @Post()
     @HttpCode(StatusCodes.CREATED)
-    async postAsync(@Body() feedback: PostModel, @Res() response: Response): Promise<any> {
-
+    async postAsync(@AuthUser() user: UserModel, @Body() post: PostModel, @Res() response: Response): Promise<any> {
         try {
-            const newFeedback = await this.postRepository.createAsync(feedback as PostModel);
+            const newPost = await this.postRepository.createAsync({...post, createdAt: new Date(), updatedAt: new Date(), userId: user.id });
 
-            return newFeedback;
+            return newPost;
         }
         catch (error) {
             console.error(error);

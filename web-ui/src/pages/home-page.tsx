@@ -19,7 +19,7 @@ export const HomePage = () => {
                 <Typography variant="h6" className="mb-8">
                     Press button and start and make your first post!
                 </Typography>
-                <Link to="/auth">
+                <Link to="/sign-in">
                     <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                         <Button variant="outlined" color="inherit">
                             Get Started

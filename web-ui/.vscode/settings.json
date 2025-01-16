@@ -5,8 +5,6 @@
         "**/.hg": true,
         "**/CVS": true,
         "**/.DS_Store": true,
-        "**/Thumbs.db": true,
-        ".eslint": true,
-        ".prettierrc": true
+        "**/Thumbs.db": true
     }
 }

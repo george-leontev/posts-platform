@@ -5,7 +5,9 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.4.0",
     "@mui/material": "^6.4.0",
+    "@mui/x-data-grid": "^7.23.6",
     "axios": "^1.7.9",
     "cra-template-typescript": "1.2.0",
     "framer-motion": "^11.18.0",
@@ -20,12 +22,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -39,6 +35,8 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@types/react-dom": "^19.0.3",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.0.1",

@@ -1,21 +1,26 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { TextField, Button, Typography } from '@mui/material';
 import { PostModel } from '../models/post-model';
+import { useAppDataContext } from '../context/app-data-context';
 
-export const PostPage = () => {
+export const ConstructorPage = () => {
     const [posts, setPosts] = useState<PostModel[]>([]);
     const [message, setMessage] = useState<string>('');
     const [topic, setTopic] = useState<string>('');
+    const { addPostAsync } = useAppDataContext();
 
     const handlePost = async () => {
         if (message.trim() && topic.trim()) {
             const newPost = {
+                id: 0,
                 topic: topic,
                 message: message,
             };
 
-            setPosts(prevPosts => [...prevPosts, newPost]);
+            const createdPost = await addPostAsync(newPost as PostModel);
+
+            setPosts(prevPosts => [...prevPosts, createdPost!]);
             setMessage('');
             setTopic('');
         }
@@ -59,7 +64,7 @@ export const PostPage = () => {
             <div className="mt-8 w-full max-w-md">
                 {posts.map((post) => (
                     <motion.div
-                        // key={post.id}
+                        key={post.id}
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.95 }}

@@ -3,7 +3,6 @@ import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 import path from 'path';
-import cors from 'cors';
 import { PrismaClient } from '@prisma/client';
 import { createExpressServer } from 'routing-controllers';
 import { PostController } from './controllers/post-controller';
@@ -12,6 +11,10 @@ import { UserController } from './controllers/user-controller';
 import { AuthController } from './controllers/auth-controller';
 
 const app = createExpressServer({
+  cors: {
+    origin: ['http://localhost:5000'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  },
   controllers: [RootController, AuthController, UserController, PostController]
 });
 
@@ -20,12 +23,6 @@ app.use(express.json());
 const swaggerDocument = YAML.load(path.join(__dirname, 'swagger.yaml'));
 app.use('/swagger-ui', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-
-const corsOptions = {
-  origin: 'http://localhost:5000',
-  methods: ['GET', 'POST', 'PUT', 'DELETE']
-};
-app.use(cors(corsOptions));
 
 // Initialize the Prisma client for database interactions
 export const prisma = new PrismaClient();

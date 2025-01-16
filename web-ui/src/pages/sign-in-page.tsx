@@ -43,7 +43,7 @@ export const SighInPage = () => {
                             onChange={(e) => setPassword(e.target.value)}
                             className="mb-2"
                         />
-                        <Link to="/post">
+                        <Link to="/posts">
                             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                                 <Button className='w-full h-12' variant="contained" color="primary" type="submit">
                                     Sign In
