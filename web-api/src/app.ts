@@ -7,9 +7,11 @@ import { PrismaClient } from '@prisma/client';
 import { createExpressServer } from 'routing-controllers';
 import { PostController } from './controllers/post-controller';
 import { RootController } from './controllers/root-controller';
+import { UserController } from './controllers/user-controller';
+import { AuthController } from './controllers/auth-controller';
 
 const app = createExpressServer({
-  controllers: [RootController, PostController]
+  controllers: [RootController, AuthController, UserController, PostController]
 });
 
 app.use(express.json());

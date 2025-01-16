@@ -4,6 +4,18 @@ info:
     version: 1.0.0
     description: API for user management
 
+components:
+    securitySchemes:
+        BearerAuth:
+            type: http
+            scheme: bearer
+            bearerFormat: JWT
+
+# Global security requirements for the API.
+security:
+    # Specifies that the BearerAuth security scheme is required for all operations.
+    - BearerAuth: []
+
 paths:
     /auth/sign-in:
         post:
@@ -25,6 +37,48 @@ paths:
                     description: User was authorized successfully
                 500:
                     description: Internal server error
+
+    /api/users/{id}:
+        get:
+            summary: Get user by id
+            tags: [Users]
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                      type: number
+            responses:
+                200:
+                    description: User retrieved successfully
+                404:
+                    description: User not found
+
+    /api/users:
+        post:
+            summary: Register a new user
+            tags: [Users]
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+                                    format: email
+                                password:
+                                    type: string
+                                    minLength: 6
+                                avatar:
+                                    type: string
+                                    format: uri
+            responses:
+                201:
+                    description: User registered successfully
+                400:
+                    description: User already exists
 
     /api/posts:
         get:
@@ -51,5 +105,96 @@ paths:
                                         updatedAt:
                                             type: string
                                             format: date-time
+                500:
+                    description: Internal server error
+
+        post:
+            summary: Add a new post
+            tags: [Posts]
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                topic:
+                                    type: string
+                                message:
+                                    type: string
+                                userId:
+                                    type: number
+            responses:
+                201:
+                    description: Feedback created successfully
+                400:
+                    description: Bad request
+                500:
+                    description: Internal server error
+
+    /api/posts/{id}:
+        put:
+            summary: Update a post entry
+            tags: [Posts]
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                      type: number
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                topic:
+                                    type: string
+                                message:
+                                    type: string
+                                userId:
+                                    type: number
+            responses:
+                200:
+                    description: Post updated successfully
+                    content:
+                        application/json:
+                            schema:
+                            type: object
+                            properties:
+                                topic:
+                                    type: string
+                                message:
+                                    type: string
+                                createdAt:
+                                    type: string
+                                    format: date-time
+                                updatedAt:
+                                    type: string
+                                    format: date-time
+                                userId:
+                                    type: number
+                400:
+                    description: Bad request (e.g., missing required fields)
+                404:
+                    description: Feedback not found
+                500:
+                    description: Internal server error
+
+        delete:
+            summary: Delete a post by id
+            tags: [Posts]
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                      type: number
+            responses:
+                204:
+                    description: Feedback deleted successfully
+                404:
+                    description: Feedback not found
                 500:
                     description: Internal server error

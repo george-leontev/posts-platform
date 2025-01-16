@@ -15,7 +15,7 @@ model User {
     password  String
     avatar    String
     createdAt DateTime @default(now()) @map("created_at")
-    posts      Post[]
+    posts     Post[]
 
     @@map("user")
     @@schema("admin")
@@ -23,12 +23,13 @@ model User {
 
 model Post {
     id        Int      @id @default(autoincrement())
-    userId  Int      @map("user_id")
+    userId    Int      @map("user_id")
+    topic     String
     message   String
     createdAt DateTime @default(now()) @map("created_at")
     updatedAt DateTime @default(now()) @map("updated_at")
 
-    author    User     @relation(fields: [userId], references: [id])
+    author User @relation(fields: [userId], references: [id])
 
     @@map("post")
     @@schema("business")
