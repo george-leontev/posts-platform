@@ -1,0 +1,35 @@
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+    schemas  = ["admin", "business"]
+}
+
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["views", "multiSchema", "prismaSchemaFolder"]
+}
+
+model User {
+    id        Int      @id @default(autoincrement())
+    email     String   @unique
+    password  String
+    avatar    String
+    createdAt DateTime @default(now()) @map("created_at")
+    posts      Post[]
+
+    @@map("user")
+    @@schema("admin")
+}
+
+model Post {
+    id        Int      @id @default(autoincrement())
+    userId  Int      @map("user_id")
+    message   String
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @default(now()) @map("updated_at")
+
+    author    User     @relation(fields: [userId], references: [id])
+
+    @@map("post")
+    @@schema("business")
+}

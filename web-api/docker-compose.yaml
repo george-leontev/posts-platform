@@ -1,0 +1,11 @@
+services:
+    posts-platform-database:
+        container_name: posts-platform-database
+        build:
+            dockerfile: Dockerfile.database
+            context: .
+        environment:
+            - POSTGRES_PASSWORD=1234567890
+            - POSTGRES_USER=postgres
+        ports:
+            - 55432:5432
