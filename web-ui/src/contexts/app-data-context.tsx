@@ -1,6 +1,8 @@
 import axios from "axios";
 import { createContext, useCallback, useContext } from "react";
 import { PostModel } from "../models/post-model";
+import { useAuthHttpRequest } from "./use-auth-http-request";
+import routes from '../constants/app-api-routes';
 
 export type AppDataContextModel = {
     getPostsAsync: () => Promise<PostModel[] | undefined>,
@@ -13,15 +15,12 @@ export type AppDataContextProviderProps = object
 
 
 function AppDataContextProvider(props: AppDataContextProviderProps) {
+    const authHttpRequest  = useAuthHttpRequest();
     const getPostsAsync = useCallback(async () => {
         try {
-            const response = await axios.request({
+            const response = await authHttpRequest({
                 method: 'GET',
-                url: 'http://localhost:3000/api/posts',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1c2VyQGV4YW1wbGUuY29tIiwiaWF0IjoxNzM3MDM0NzgyfQ.MNT0eI5NMgDgwd-lBK7GH7SOicwUdOpwrSXmy9rFwHg'
-                }
+                url: routes.posts,
             });
 
             if (response && response.status === 200) {
@@ -34,14 +33,10 @@ function AppDataContextProvider(props: AppDataContextProviderProps) {
 
     const addPostAsync = useCallback(async (post: PostModel) => {
         try {
-            const response = await axios.request({
+            const response = await authHttpRequest({
                 method: 'POST',
-                url: 'http://localhost:3000/api/posts',
-                data: post,
-                headers: {
-                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1c2VyQGV4YW1wbGUuY29tIiwiaWF0IjoxNzM3MDM0NzgyfQ.MNT0eI5NMgDgwd-lBK7GH7SOicwUdOpwrSXmy9rFwHg',
-                    'Content-Type': 'application/json'
-                }
+                url: routes.posts,
+                data: post
             });
 
             if (response && response.status === 200) {

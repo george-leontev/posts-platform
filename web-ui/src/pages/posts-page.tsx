@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { PostModel } from '../models/post-model';
-import { useAppDataContext } from '../context/app-data-context';
-import { Button, Dialog, IconButton } from '@mui/material';
+import { useAppDataContext } from '../contexts/app-data-context';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
 export const PostsPage = () => {
@@ -12,7 +12,6 @@ export const PostsPage = () => {
     const handleClickOpen = () => {
         setOpen(true);
     };
-
     const handleClose = () => {
         setOpen(false);
     };
@@ -20,7 +19,7 @@ export const PostsPage = () => {
     useEffect(() => {
         (async () => {
             const posts = await getPostsAsync();
-            console.log(posts);
+            debugger;
 
             if (posts) {
                 setPosts(posts);
@@ -45,13 +44,35 @@ export const PostsPage = () => {
             </div>
 
             <div className='absolute bottom-4 right-4'>
-                <IconButton className='flex' size="large" color='primary' onClick={handleClickOpen}>
-                    <AddIcon />
-                </IconButton>
+                <Button className='w-14 h-14' sx={{ backgroundColor: '#1976d2', color: 'white', borderRadius: '100%' }} onClick={handleClickOpen}>
+                    <AddIcon className='' />
+                </Button>
             </div>
 
             <Dialog open={open} onClose={handleClose}>
-
+                <DialogTitle>Add your own post</DialogTitle>
+                <DialogContent className='flex flex-col gap-6 w-[500px]'>
+                    <TextField
+                        label="Topic"
+                        variant="outlined"
+                        fullWidth
+                    />
+                    <TextField
+                        label="What's on your mind?"
+                        variant="outlined"
+                        fullWidth
+                        multiline
+                        rows={4}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button variant='contained' onClick={handleClose} color="error">
+                        Cancel
+                    </Button>
+                    <Button variant='contained' onClick={handleClose} color="success">
+                        Confirm
+                    </Button>
+                </DialogActions>
             </Dialog>
         </div>
     );

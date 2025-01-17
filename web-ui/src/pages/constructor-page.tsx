@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { TextField, Button, Typography } from '@mui/material';
 import { PostModel } from '../models/post-model';
-import { useAppDataContext } from '../context/app-data-context';
+import { useAppDataContext } from '../contexts/app-data-context';
 
 export const ConstructorPage = () => {
     const [posts, setPosts] = useState<PostModel[]>([]);
@@ -33,7 +33,7 @@ export const ConstructorPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 50 }}
                 transition={{ duration: 0.5 }}
-                className="flex flex-col gap-6 w-full max-w-md p-6 bg-white rounded-lg shadow-md"
+                className="flex flex-col gap-6 max-w-md p-6 bg-white rounded-lg shadow-md"
             >
                 <Typography variant="h4">
                     Create a Post

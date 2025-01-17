@@ -1,18 +1,26 @@
-import React, { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { motion } from 'framer-motion';
 import { TextField, Button, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/app-auth-context';
+import { SignInModel } from '../models/signin-model';
 
 export const SighInPage = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const navigate = useNavigate();
+    const { signIn } = useAuth();
 
-    const handleSignIn = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const signInHandler = useCallback(async () => {
+        const signInUser: SignInModel = {
+            email,
+            password,
+        }
 
-        console.log('Email:', email);
-        console.log('Password:', password);
-    };
+        await signIn(signInUser);
+
+        await navigate('/posts');
+    }, [signIn, email, password, navigate]);
 
     return (
         <div className="flex min-h-screen">
@@ -27,7 +35,7 @@ export const SighInPage = () => {
                     <Typography variant="h4" component="h1" gutterBottom>
                         Sign In
                     </Typography>
-                    <form className="flex flex-col gap-6" onSubmit={handleSignIn}>
+                    <div className="flex flex-col gap-6">
                         <TextField
                             label="Email"
                             variant="outlined"
@@ -43,14 +51,14 @@ export const SighInPage = () => {
                             onChange={(e) => setPassword(e.target.value)}
                             className="mb-2"
                         />
-                        <Link to="/posts">
-                            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                                <Button className='w-full h-12' variant="contained" color="primary" type="submit">
-                                    Sign In
-                                </Button>
-                            </motion.div>
-                        </Link>
-                    </form>
+
+                        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                            <Button className='w-full h-12' variant="contained" color="primary" type="submit" onClick={signInHandler}>
+                                Sign In
+                            </Button>
+                        </motion.div>
+
+                    </div>
                 </motion.div>
             </div>
 

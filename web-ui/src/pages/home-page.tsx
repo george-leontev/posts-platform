@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { Typography, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
@@ -17,7 +16,7 @@ export const HomePage = () => {
                     Welcome to posting platform
                 </Typography>
                 <Typography variant="h6" className="mb-8">
-                    Press button and start and make your first post!
+                    Press button to start and make your first post!
                 </Typography>
                 <Link to="/sign-in">
                     <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
