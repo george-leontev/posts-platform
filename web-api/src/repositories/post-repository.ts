@@ -12,7 +12,7 @@ export class PostRepository {
 
     async createAsync(post: PostModel) {
         const newPost = await prisma.post.create({
-            data: post
+            data: { ...post }
         });
 
         return newPost;

@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import axios from 'axios';
 import routes from '../constants/app-api-routes';
 import { HttpConstants } from '../constants/app-http-constants';
-import axios from 'axios';
 import {
     AuthContextModel,
     GetUserAuthDataFromStorageFunc,
@@ -76,6 +76,7 @@ function AuthProvider(props: AppBaseProviderProps) {
 
             } catch (error) {
                 console.log('It was happened error during a process of an user security token revoke!');
+                throw error;
             }
         }
         localStorage.removeItem('@userAuthData');
@@ -84,16 +85,21 @@ function AuthProvider(props: AppBaseProviderProps) {
     }, [getUserAuthDataFromStorage]);
 
     const isAuthenticated = useCallback(() => {
-        debugger;
         const user = getUserAuthDataFromStorage();
-        
+
         return user !== null;
-    }, []);
+    }, [getUserAuthDataFromStorage]);
 
     return (
         <AuthContext.Provider
-            value={{ user, signIn, signOut, getUserAuthDataFromStorage, isAuthenticated }}
-            {...props}
+            value={ {
+                user,
+                signIn,
+                signOut,
+                getUserAuthDataFromStorage,
+                isAuthenticated
+            } }
+            { ...props }
         />
     );
 }

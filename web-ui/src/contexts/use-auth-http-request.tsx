@@ -4,7 +4,6 @@ import { HttpConstants } from '../constants/app-http-constants';
 import { httpClientBase } from './http-client-base';
 import { useAuth } from './app-auth-context';
 
-
 export type AxiosWithCredentialsFunc = (config: AxiosRequestConfig, suppressLoader?: boolean, suppressShowUnauthorized?: boolean) => Promise<AxiosResponse | undefined>;
 
 export const useAuthHttpRequest = () => {

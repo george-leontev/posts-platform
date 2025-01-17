@@ -19,7 +19,7 @@ export class PostController {
 
 
     @Get()
-    async getAllAsync( @Res() response: Response): Promise<any> {
+    async getAllAsync(@Res() response: Response): Promise<any> {
         try {
             const posts = await this.postRepository.getAllAsync();
 
@@ -34,7 +34,7 @@ export class PostController {
     @HttpCode(StatusCodes.CREATED)
     async postAsync(@AuthUser() user: UserModel, @Body() post: PostModel, @Res() response: Response): Promise<any> {
         try {
-            const newPost = await this.postRepository.createAsync({...post, createdAt: new Date(), updatedAt: new Date(), userId: user.id });
+            const newPost = await this.postRepository.createAsync({...post, userId: user.id});
 
             return newPost;
         }

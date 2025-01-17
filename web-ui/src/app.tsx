@@ -1,40 +1,39 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { ConstructorPage } from './pages/constructor-page';
 import { HomePage } from './pages/home-page';
 import { SighInPage } from './pages/sign-in-page';
 import { PostsPage } from './pages/posts-page';
 import { AppDataContextProvider } from './contexts/app-data-context';
 import { AuthProvider, useAuth } from './contexts/app-auth-context';
+import { AppSharedContextProvider } from './contexts/app-shared-context';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  // const { isAuthenticated } = useAuth();
-  return true ? <>{children}</> : <Navigate to="/sign-in" />;
+    const { isAuthenticated } = useAuth();
+    return isAuthenticated() ? <>{children}</> : <Navigate to="/sign-in" />;
 };
 
 const App = () => {
-  return (
-    <Router>
-      <AuthProvider>
-        <AppDataContextProvider>
+    return (
+        <Router>
+            <AuthProvider>
+                <AppDataContextProvider>
+                    <AppSharedContextProvider>
+                        <Routes>
+                            <Route path="/home" element={ <HomePage /> } />
+                            <Route path="/sign-in" element={ <SighInPage /> } />
+                            <Route path="/posts" element={
+                                <ProtectedRoute>
+                                    <PostsPage />
+                                </ ProtectedRoute>
+                            } />
 
-          <Routes>
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/sign-in" element={<SighInPage />} />
-            <Route path="/posts" element={
+                            <Route path="/" element={ <Navigate to="/login" /> } />
+                        </Routes>
+                    </AppSharedContextProvider>
+                </AppDataContextProvider>
+            </AuthProvider>
+        </Router>
 
-                <PostsPage />
-          
-            } />
-            <Route path="/constructor" element={<ConstructorPage />} />
-
-            <Route path="/" element={<Navigate to="/login" />} />
-          </Routes>
-
-        </AppDataContextProvider>
-      </AuthProvider>
-    </Router>
-
-  );
+    );
 };
 
 export default App;
