@@ -1,9 +1,10 @@
 import { useCallback, useEffect } from 'react';
 import { useAppDataContext } from '../contexts/app-data-context';
-import { Button } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import { Button, Tooltip } from '@mui/material';
 import { AddPostDialog } from '../dialogs/add-post-dialog';
 import { useAppSharedContext } from '../contexts/app-shared-context';
+import { IoAddSharp as AddIcon } from 'react-icons/io5';
+import { PostCard } from '../components/post-card';
 
 export const PostsPage = () => {
     const { getPostsAsync } = useAppDataContext();
@@ -11,7 +12,7 @@ export const PostsPage = () => {
 
     const onDialogOpenClickHandler = useCallback(() => {
         setIsDialogVisible(true);
-        }, [setIsDialogVisible]);
+    }, [setIsDialogVisible]);
 
     useEffect(() => {
         (async () => {
@@ -24,25 +25,27 @@ export const PostsPage = () => {
     }, [getPostsAsync, setPosts]);
 
     return (
-        <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100'>
-            <div className="flex flex-col w-full items-center gap-6 p-4">
+        <div className='flex flex-col min-h-screen bg-gray-100'>
+            <div className="flex flex-col items-center justify-center w-full gap-6 p-4">
                 {posts.map((post) => {
                     return (
-                        <div
-                            key={ post.id }
-                            className="flex flex-col gap-6 w-full h-48 max-w-md p-6 bg-white rounded-lg shadow-md"
-                        >
-                            <h2 className="text-xl font-bold">{post.topic}</h2>
-                            <p className="text-gray-700">{post.message}</p>
+                        <div key={ post.id }>
+                            <PostCard post={ post } />
                         </div>
                     );
                 })}
             </div>
 
-            <div className='absolute bottom-4 right-4'>
-                <Button className='w-14 h-14' sx={ { backgroundColor: '#1976d2', color: 'white', borderRadius: '100%' } } onClick={ onDialogOpenClickHandler }>
-                    <AddIcon />
-                </Button>
+            <div className='fixed bottom-6 right-6'>
+                <Tooltip title="Create post" placement="top">
+                    <Button
+                        className='w-16 h-16'
+                        sx={ { backgroundColor: '#1976d2', color: 'white', borderRadius: '100%' } }
+                        onClick={ onDialogOpenClickHandler }
+                    >
+                        <AddIcon size={ 32 } />
+                    </Button>
+                </Tooltip>
             </div>
 
             <AddPostDialog />

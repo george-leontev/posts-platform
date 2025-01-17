@@ -6,7 +6,8 @@ import { HttpConstants } from '../constants/app-http-constants';
 
 export type AppDataContextModel = {
     getPostsAsync: () => Promise<PostModel[] | undefined>,
-    addPostAsync: (post: PostModel) => Promise<PostModel | undefined>
+    addPostAsync: (post: PostModel) => Promise<PostModel | undefined>,
+    uploadAsync: (postId: number, formData: FormData) => Promise<PostModel | undefined>
 }
 
 const AppDataContext = createContext({} as AppDataContextModel);
@@ -20,7 +21,7 @@ function AppDataContextProvider(props: AppDataContextProviderProps) {
         try {
             const response = await authHttpRequest({
                 method: 'GET',
-                url: routes.posts,
+                url: routes.posts
             });
 
             if (response && response.status === 200) {
@@ -47,7 +48,24 @@ function AppDataContextProvider(props: AppDataContextProviderProps) {
         }
     }, [authHttpRequest]);
 
-    return <AppDataContext.Provider { ...props } value={ { getPostsAsync, addPostAsync } } />
+    const uploadAsync = useCallback(async (postId: number, formData: FormData) => {
+        try {
+            const response = await authHttpRequest({
+                method: 'POST',
+                url: `${routes.posts}/upload/${postId}`,
+                headers: { 'Content-Type': 'multipart/form-data' },
+                data: formData,
+            });
+
+            if (response && response.status === HttpConstants.StatusCodes.Created) {
+                return response.data as PostModel;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }, [authHttpRequest]);
+
+    return <AppDataContext.Provider { ...props } value={ { getPostsAsync, addPostAsync, uploadAsync } } />
 }
 
 const useAppDataContext = () => useContext(AppDataContext);

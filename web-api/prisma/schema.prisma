@@ -29,8 +29,23 @@ model Post {
     createdAt DateTime @default(now()) @map("created_at")
     updatedAt DateTime @default(now()) @map("updated_at")
 
-    author User @relation(fields: [userId], references: [id])
+    uploadedFiles UploadedFile[]
+    author        User           @relation(fields: [userId], references: [id])
 
     @@map("post")
+    @@schema("business")
+}
+
+model UploadedFile {
+    id       Int    @id @default(autoincrement())
+    data     Bytes?
+    fileName String @map("file_name")
+    mimeType String @map("mime_type")
+
+    postId Int @map("post_id")
+
+    post Post @relation(fields: [postId], references: [id])
+
+    @@map("uploaded_file")
     @@schema("business")
 }

@@ -1,4 +1,4 @@
-import { Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button, Snackbar } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button, Snackbar, Input, Typography } from '@mui/material';
 import { useAppSharedContext } from '../contexts/app-shared-context';
 import { useCallback, useState } from 'react';
 import { useAppDataContext } from '../contexts/app-data-context';
@@ -8,11 +8,16 @@ export const AddPostDialog = () => {
     const [message, setMessage] = useState<string>('');
     const [topic, setTopic] = useState<string>('');
     const [toastVisibility, setToastVisibility] = useState<boolean>(false);
-    const { addPostAsync } = useAppDataContext();
+    const [fileName, setFileName] = useState<string>('');
+    const { addPostAsync, uploadAsync } = useAppDataContext();
     const { setPosts, setIsDialogVisible, isDialogVisible } = useAppSharedContext();
+
 
     const onDialogCloseClickHandler = useCallback(() => {
         setIsDialogVisible(false);
+        setFileName('');
+        setTopic('');
+        setMessage('');
     }, [setIsDialogVisible]);
 
     const onAddPostClickHandler = useCallback(
@@ -25,10 +30,26 @@ export const AddPostDialog = () => {
 
                 const createdPost = await addPostAsync(newPost as PostModel);
                 if (createdPost) {
+                    const fileUploadForm = document.getElementById('file-upload-form');
+                    if (fileUploadForm) {
+                        const formData = new FormData(fileUploadForm as HTMLFormElement);
+                        await uploadAsync(createdPost.id, formData)
+                    }
+                }
+
+                if (createdPost) {
                     setPosts(prevPosts => [...prevPosts, createdPost]);
                 }
             }
-        }, [addPostAsync, message, setPosts, topic]);
+        }, [addPostAsync, message, setPosts, topic, uploadAsync]);
+
+    const addPostFileHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files) {
+
+            const selectedFile = event.target.files[0];
+            setFileName(selectedFile.name);
+        }
+    };
 
     return (
         <Dialog open={ isDialogVisible } onClose={ onDialogCloseClickHandler }>
@@ -50,6 +71,25 @@ export const AddPostDialog = () => {
                     multiline
                     rows={ 4 }
                 />
+
+                <div className={ 'flex flex-col gap-4' }>
+                    <form id="file-upload-form" encType="multipart/form-data">
+                        <Input
+                            type="file"
+                            id="file-upload"
+                            name="fileUpload"
+                            inputProps={ { accept: 'image/*,video/*' } }
+                            onChange={ addPostFileHandler }
+                            style={ { display: 'none' } }
+                        />
+                        <label htmlFor="file-upload">
+                            <Button variant="contained" component="span">
+                                Choose File
+                            </Button>
+                        </label>
+                    </form>
+                    {fileName && <Typography variant="body1">{fileName}</Typography>}
+                </div>
             </DialogContent>
             <DialogActions>
                 <Button
@@ -65,7 +105,7 @@ export const AddPostDialog = () => {
                     color="success"
                     onClick={ () => {
                         onAddPostClickHandler();
-                        onDialogCloseClickHandler();
+                        // onDialogCloseClickHandler();
                         setToastVisibility(true);
                     } }
                 >
