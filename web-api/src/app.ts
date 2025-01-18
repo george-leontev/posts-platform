@@ -20,7 +20,7 @@ if (!fs.existsSync(uploadsDir)) {
 
 const app = createExpressServer({
   cors: {
-    origin: ['http://localhost:5000'],
+    origin: [process.env.WEB_UI],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
   },
   controllers: [RootController, AuthController, UserController, PostController, UploadedFileController]
@@ -30,16 +30,6 @@ app.use(express.json());
 
 const swaggerDocument = YAML.load(path.join(__dirname, 'swagger.yaml'));
 app.use('/swagger-ui', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/'); // Directory to store uploaded files
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); // Append timestamp to the filename
-  },
-});
-export const upload = multer({ storage });
 
 // Initialize the Prisma client for database interactions
 export const prisma = new PrismaClient();
