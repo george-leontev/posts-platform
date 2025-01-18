@@ -94,11 +94,11 @@ paths:
                                     type: object
                                     properties:
                                         id:
-                                            type: integer
+                                            type: number
                                         message:
                                             type: string
                                         userId:
-                                            type: integer
+                                            type: number
                                         createdAt:
                                             type: string
                                             format: date-time
@@ -132,16 +132,9 @@ paths:
                 500:
                     description: Internal server error
 
-    /api/posts/{id}:
         put:
             summary: Update a post entry
             tags: [Posts]
-            parameters:
-                - in: path
-                  name: id
-                  required: true
-                  schema:
-                      type: number
             requestBody:
                 required: true
                 content:
@@ -182,6 +175,22 @@ paths:
                 500:
                     description: Internal server error
 
+    /api/posts/{id}:
+        get:
+            summary: Get post by  id
+            tags: [Posts]
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                      type: number
+            responses:
+                200:
+                    description: Uploaded files retrieved successfully
+                404:
+                    description: Uploaded files not found
+
         delete:
             summary: Delete a post by id
             tags: [Posts]
@@ -198,3 +207,75 @@ paths:
                     description: Feedback not found
                 500:
                     description: Internal server error
+
+    /api/uploaded-files/{id}:
+        get:
+            summary: Get uploaded file by id
+            tags: [UploadedFiles]
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                      type: number
+            responses:
+                200:
+                    description: Uploaded file retrieved successfully
+                404:
+                    description: Uploaded file not found
+
+    /api/uploaded-files/{postId}:
+        post:
+            summary: Add a new uploaded file
+            tags: [UploadedFiles]
+            parameters:
+                - name: postId
+                  in: path
+                  required: true
+                  schema:
+                      type: number
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                data:
+                                    type: string
+                                fileName:
+                                    type: string
+                                mimeType:
+                                    type: string
+            responses:
+                201:
+                    description: File uploaded successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    id:
+                                        type: number
+                                    fileName:
+                                        type: string
+                                    mimeType:
+                                        type: string
+                404:
+                    description: File not found
+
+    /api/uploaded-files/list/{postId}:
+        get:
+            summary: Get list of post uploaded files by its id
+            tags: [UploadedFiles]
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                      type: number
+            responses:
+                200:
+                    description: Uploaded files retrieved successfully
+                404:
+                    description: Uploaded files not found
