@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, TextField, DialogActions, Button, Snackbar, Input, Typography } from '@mui/material';
+import { Dialog, DialogContent, TextField, DialogActions, Button,  Input, Typography } from '@mui/material';
 import { useAppSharedContext } from '../contexts/app-shared-context';
 import { useCallback, useEffect, useState } from 'react';
 import { useAppDataContext } from '../contexts/app-data-context';
@@ -9,7 +9,7 @@ export const PostDialog = () => {
     const [post, setPost] = useState<PostModel>(defaultPost);
 
     const { getPostAsync, addPostAsync, updatePostAsync, addUploadedFileAsync } = useAppDataContext();
-    const { setPosts, setIsDialogVisible, isDialogVisible, setCurrentPostId, currentPostId, isToastVisible, setIsToastVisible } = useAppSharedContext();
+    const { setPosts, setIsDialogVisible, isDialogVisible, setCurrentPostId, currentPostId, setIsToastVisible } = useAppSharedContext();
 
     useEffect(() => {
         if (currentPostId) {
@@ -141,13 +141,6 @@ export const PostDialog = () => {
                 >
                     Confirm
                 </Button>
-
-                <Snackbar
-                    open={ isToastVisible }
-                    autoHideDuration={ 5000 }
-                    onClose={ () => setIsToastVisible(false) }
-                    message="The post was created succesfully!"
-                />
             </DialogActions>
         </Dialog>
     );
