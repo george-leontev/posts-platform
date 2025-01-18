@@ -1,5 +1,5 @@
 export default {
-    host: process.env.NODE_ENV !== 'production' ? 'http://localhost:3000' : `http://${window.location.hostname}:3000`,
+    host: process.env.REACT_APP_WEB_API_ROOT,
     accountSignIn: '/auth/sign-in',
     accountSignOut: '/auth/sign-out',
     posts: '/api/posts',
