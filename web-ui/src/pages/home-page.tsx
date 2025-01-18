@@ -1,8 +1,11 @@
 import { motion } from 'framer-motion';
 import { Typography, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../contexts/app-auth-context';
 
 export const HomePage = () => {
+    const { user } = useAuth();
+
     return (
         <div className="flex flex-col items-center justify-center bg-[#161616] min-h-screen text-white">
             <motion.div
@@ -18,10 +21,10 @@ export const HomePage = () => {
                 <Typography variant="h6" className="mb-8">
                     Press button to start and make your first post!
                 </Typography>
-                <Link to="/sign-in">
+                <Link to={ user ? '/posts' : '/sign-in' }>
                     <motion.div whileHover={ { scale: 1.05 } } whileTap={ { scale: 0.95 } }>
-                        <Button variant="outlined" color="inherit">
-                            Get Started
+                        <Button sx={ { width: '140px' } } variant="outlined" color="inherit">
+                            { user ? 'Get started' : 'Sign in' }
                         </Button>
                     </motion.div>
                 </Link>

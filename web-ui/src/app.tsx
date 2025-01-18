@@ -26,7 +26,7 @@ const App = () => {
                                 </ ProtectedRoute>
                             } />
 
-                            <Route path="/" element={ <Navigate to="/sign-in" /> } />
+                            <Route path="/" element={ <Navigate to="/home" /> } />
                         </Routes>
                     </AppSharedContextProvider>
                 </AppDataContextProvider>

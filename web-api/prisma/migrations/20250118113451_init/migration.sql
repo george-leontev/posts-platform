@@ -19,6 +19,7 @@ CREATE TABLE "admin"."user" (
 CREATE TABLE "business"."post" (
     "id" SERIAL NOT NULL,
     "user_id" INTEGER NOT NULL,
+    "topic" TEXT NOT NULL,
     "message" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -26,8 +27,22 @@ CREATE TABLE "business"."post" (
     CONSTRAINT "post_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "business"."uploaded_file" (
+    "id" SERIAL NOT NULL,
+    "data" BYTEA,
+    "file_name" TEXT NOT NULL,
+    "mime_type" TEXT NOT NULL,
+    "post_id" INTEGER NOT NULL,
+
+    CONSTRAINT "uploaded_file_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "user_email_key" ON "admin"."user"("email");
 
 -- AddForeignKey
-ALTER TABLE "business"."post" ADD CONSTRAINT "post_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "admin"."user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "business"."post" ADD CONSTRAINT "post_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "admin"."user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "business"."uploaded_file" ADD CONSTRAINT "uploaded_file_post_id_fkey" FOREIGN KEY ("post_id") REFERENCES "business"."post"("id") ON DELETE CASCADE ON UPDATE CASCADE;

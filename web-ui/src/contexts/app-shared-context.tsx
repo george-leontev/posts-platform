@@ -8,7 +8,9 @@ export type AppSharedContextModel = {
     posts: PostModel[],
     setPosts: React.Dispatch<React.SetStateAction<PostModel[]>>,
     currentPostId?: number,
-    setCurrentPostId: React.Dispatch<React.SetStateAction<number | undefined>>
+    setCurrentPostId: React.Dispatch<React.SetStateAction<number | undefined>>,
+    isToastVisible: boolean,
+    setIsToastVisible: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const AppSharedContext = createContext({} as AppSharedContextModel);
@@ -17,6 +19,7 @@ function AppSharedContextProvider(props: AppBaseProviderProps) {
     const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
     const [posts, setPosts] = useState<PostModel[]>([]);
     const [currentPostId, setCurrentPostId] = useState<number>();
+    const [isToastVisible, setIsToastVisible] = useState<boolean>(false);
 
     return <AppSharedContext.Provider value={ {
         isDialogVisible,
@@ -24,7 +27,9 @@ function AppSharedContextProvider(props: AppBaseProviderProps) {
         posts,
         setPosts,
         currentPostId,
-        setCurrentPostId
+        setCurrentPostId,
+        isToastVisible,
+        setIsToastVisible
     } } { ...props } />
 }
 

@@ -1,4 +1,4 @@
-import { Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button, Snackbar, Input, Typography } from '@mui/material';
+import { Dialog, DialogContent, TextField, DialogActions, Button, Snackbar, Input, Typography } from '@mui/material';
 import { useAppSharedContext } from '../contexts/app-shared-context';
 import { useCallback, useEffect, useState } from 'react';
 import { useAppDataContext } from '../contexts/app-data-context';
@@ -6,11 +6,10 @@ import { PostModel, defaultPost } from '../models/post-model';
 
 export const PostDialog = () => {
     const [fileName, setFileName] = useState<string>('');
-    const [isToastVisible, setIsToastVisible] = useState<boolean>(false);
     const [post, setPost] = useState<PostModel>(defaultPost);
 
     const { getPostAsync, addPostAsync, updatePostAsync, addUploadedFileAsync } = useAppDataContext();
-    const { setPosts, setIsDialogVisible, isDialogVisible, setCurrentPostId, currentPostId } = useAppSharedContext();
+    const { setPosts, setIsDialogVisible, isDialogVisible, setCurrentPostId, currentPostId, isToastVisible, setIsToastVisible } = useAppSharedContext();
 
     useEffect(() => {
         if (currentPostId) {
@@ -77,7 +76,7 @@ export const PostDialog = () => {
                 }
                 setIsToastVisible(true);
             }
-        }, [addPostAsync, currentPostId, onCloseClickHandler, post, setPosts, updatePostAsync, uploadAsync]);
+        }, [addPostAsync, currentPostId, onCloseClickHandler, post, setIsToastVisible, setPosts, updatePostAsync, uploadAsync]);
 
     const addPostFileHandler = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
@@ -88,7 +87,7 @@ export const PostDialog = () => {
 
     return (
         <Dialog open={ isDialogVisible } onClose={ onCloseClickHandler }>
-            <DialogTitle>Add your own post</DialogTitle>
+            <Typography className='flex items-center h-12 p-7 font-bold' variant='h5'>Add your own post</Typography>
             <DialogContent className='flex flex-col gap-6 w-[500px]'>
                 <TextField
                     label="Topic"
@@ -100,7 +99,7 @@ export const PostDialog = () => {
                 <TextField
                     label="What's on your mind?"
                     variant="outlined"
-                    value={ post?.message }
+                    value={ post.message }
                     onChange={ (e) => setPost(prev => { return { ...prev, message: e.target.value } }) }
                     fullWidth
                     multiline
@@ -113,12 +112,12 @@ export const PostDialog = () => {
                             type="file"
                             id="file-upload"
                             name="fileUpload"
-                            inputProps={ { accept: 'image/*,video/*' } }
+                            inputProps={ { accept: 'image/*' } }
                             onChange={ addPostFileHandler }
                             style={ { display: 'none' } }
                         />
                         <label htmlFor="file-upload">
-                            <Button variant="contained" component="span">
+                            <Button variant="outlined" component="span">
                                 Choose File
                             </Button>
                         </label>
@@ -142,9 +141,11 @@ export const PostDialog = () => {
                 >
                     Confirm
                 </Button>
+
                 <Snackbar
                     open={ isToastVisible }
-                    autoHideDuration={ 4000 }
+                    autoHideDuration={ 5000 }
+                    onClose={ () => setIsToastVisible(false) }
                     message="The post was created succesfully!"
                 />
             </DialogActions>
