@@ -1,0 +1,33 @@
+services:
+    posts-platform-database:
+        container_name: posts-platform-database
+        build:
+            dockerfile: Dockerfile.database
+            context: .
+        environment:
+            - POSTGRES_PASSWORD=1234567890
+            - POSTGRES_USER=postgres
+        ports:
+            - 55432:5432
+
+    posts-platform-web-api:
+        container_name: posts-platform-web-api
+        build:
+            dockerfile: Dockerfile.web-api
+            context: ./web-api
+        ports:
+          - 5022:3000
+        depends_on:
+            - posts-platform-database
+        restart: always
+        command: sh -c "npx prisma migrate deploy && npx prisma db seed && node ./src/app.js"
+
+    posts-platform-web-ui:
+        container_name: posts-platform-web-ui
+        build:
+            dockerfile: Dockerfile.web-ui
+            context: ./web-ui
+        ports:
+            - 5020:80
+        depends_on:
+            - posts-platform-web-api
