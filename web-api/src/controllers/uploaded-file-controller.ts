@@ -18,6 +18,9 @@ export class UploadedFileController {
                 fileName: true,
                 mimeType: true,
                 postId: true
+            },
+            orderBy: {
+                id: "desc"
             }
         });
 

@@ -26,37 +26,37 @@ export const PostsPage = () => {
 
     return (
         <>
-        <div className='flex flex-col min-h-screen bg-gray-100'>
-            <div className="flex flex-col items-center justify-center w-full gap-6 p-4">
-                {posts.map((post) => {
-                    return (
-                        <div key={ post.id }>
-                            <PostCard post={ post } />
-                        </div>
-                    );
-                })}
-            </div>
+            <div className='flex flex-col min-h-screen bg-gray-100'>
+                <div className="flex flex-col items-center justify-center w-full gap-6 p-4">
+                    {posts.map((post) => {
+                        return (
+                            <div key={ post.id }>
+                                <PostCard post={ post } />
+                            </div>
+                        );
+                    })}
+                </div>
 
-            <div className='fixed bottom-6 right-6'>
-                <Tooltip title="Create post" placement="top">
-                    <Button
-                        className='w-16 h-16'
-                        sx={ { backgroundColor: '#1976d2', color: 'white', borderRadius: '100%' } }
-                        onClick={ onDialogOpenClickHandler }
-                    >
-                        <AddIcon size={ 32 } />
-                    </Button>
-                </Tooltip>
-            </div>
+                <div className='fixed bottom-6 right-6'>
+                    <Tooltip title="Create post" placement="top">
+                        <Button
+                            className='w-16 h-16'
+                            sx={ { backgroundColor: '#1976d2', color: 'white', borderRadius: '100%' } }
+                            onClick={ onDialogOpenClickHandler }
+                        >
+                            <AddIcon size={ 32 } />
+                        </Button>
+                    </Tooltip>
+                </div>
 
-            <PostDialog />
-        </div>
-        <Snackbar
-            open={ isToastVisible }
-            autoHideDuration={ 3000 }
-            onClose={ () => setIsToastVisible(false) }
-            message="The post was created succesfully!"
-        />
+                <PostDialog />
+            </div>
+            <Snackbar
+                open={ isToastVisible }
+                autoHideDuration={ 3000 }
+                onClose={ () => setIsToastVisible(false) }
+                message="The post was created or updated succesfully!"
+            />
         </>
     );
 };
