@@ -3,14 +3,20 @@ import { useAppSharedContext } from '../contexts/app-shared-context';
 import { useCallback, useState } from 'react';
 import { useAppDataContext } from '../contexts/app-data-context';
 import { PostModel } from '../models/post-model';
+import { DialogModes } from '../models/enums/dialog-modes';
 
-export const AddPostDialog = () => {
+export const PostDialog = ({ mode }: {mode: DialogModes}) => {
     const [message, setMessage] = useState<string>('');
     const [topic, setTopic] = useState<string>('');
     const [toastVisibility, setToastVisibility] = useState<boolean>(false);
     const [fileName, setFileName] = useState<string>('');
-    const { addPostAsync, uploadAsync } = useAppDataContext();
+    const { addPostAsync, uploadMediaFileAsync } = useAppDataContext();
     const { setPosts, setIsDialogVisible, isDialogVisible } = useAppSharedContext();
+    // const [post, setPost] = useState<PostModel>(mode === DialogModes.edit && newPost ? { ...newPost } : {
+    //     id: 0,
+    //     topic: '',
+    //     message: '',
+    // } as PostModel);
 
 
     const onDialogCloseClickHandler = useCallback(() => {
@@ -27,21 +33,22 @@ export const AddPostDialog = () => {
                     topic: topic,
                     message: message,
                 };
-
                 const createdPost = await addPostAsync(newPost as PostModel);
                 if (createdPost) {
                     const fileUploadForm = document.getElementById('file-upload-form');
                     if (fileUploadForm) {
                         const formData = new FormData(fileUploadForm as HTMLFormElement);
-                        await uploadAsync(createdPost.id, formData)
+                        const fileUploadElement = document.getElementById('file-upload') as HTMLInputElement;
+                        if (fileUploadElement && fileUploadElement.files!.length > 0) {
+                            await uploadMediaFileAsync(createdPost.id, formData)
+                        }
                     }
                 }
-
                 if (createdPost) {
                     setPosts(prevPosts => [...prevPosts, createdPost]);
                 }
             }
-        }, [addPostAsync, message, setPosts, topic, uploadAsync]);
+        }, [addPostAsync, message, setPosts, topic, uploadMediaFileAsync]);
 
     const addPostFileHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
@@ -105,7 +112,7 @@ export const AddPostDialog = () => {
                     color="success"
                     onClick={ () => {
                         onAddPostClickHandler();
-                        // onDialogCloseClickHandler();
+                        onDialogCloseClickHandler();
                         setToastVisibility(true);
                     } }
                 >

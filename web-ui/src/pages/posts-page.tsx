@@ -1,10 +1,11 @@
 import { useCallback, useEffect } from 'react';
 import { useAppDataContext } from '../contexts/app-data-context';
 import { Button, Tooltip } from '@mui/material';
-import { AddPostDialog } from '../dialogs/add-post-dialog';
+import { PostDialog } from '../dialogs/post-dialog';
 import { useAppSharedContext } from '../contexts/app-shared-context';
 import { IoAddSharp as AddIcon } from 'react-icons/io5';
 import { PostCard } from '../components/post-card';
+import { DialogModes } from '../models/enums/dialog-modes';
 
 export const PostsPage = () => {
     const { getPostsAsync } = useAppDataContext();
@@ -48,7 +49,7 @@ export const PostsPage = () => {
                 </Tooltip>
             </div>
 
-            <AddPostDialog />
+            <PostDialog mode={ DialogModes.add } />
         </div>
     );
 };

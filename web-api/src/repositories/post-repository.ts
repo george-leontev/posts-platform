@@ -5,7 +5,17 @@ import { PostModel } from "../models/post-model";
 export class PostRepository {
 
     async getAllAsync() {
-        const posts = await prisma.post.findMany();
+        const posts = await prisma.post.findMany(
+            {
+                include: {
+                  uploadedFiles: {
+                    select: {
+                      id: true,
+                    },
+                  },
+                },
+              }
+        );
 
         return posts
     };

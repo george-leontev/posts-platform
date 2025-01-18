@@ -10,7 +10,7 @@ import { DuplicateEntityError } from '../errors/duplicate-entity-error';
  * UserController handles HTTP requests related to user operations.
  * It provides endpoints to get and post user.
  */
-// @UseBefore(Authorize)
+@UseBefore(Authorize)
 @JsonController('/api/users')
 export class UserController {
 

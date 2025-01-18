@@ -14,6 +14,7 @@ const AppSharedContext = createContext({} as AppSharedContextModel);
 function AppSharedContextProvider(props: AppBaseProviderProps) {
     const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
     const [posts, setPosts] = useState<PostModel[]>([]);
+    
 
     return <AppSharedContext.Provider value={ {
         isDialogVisible,

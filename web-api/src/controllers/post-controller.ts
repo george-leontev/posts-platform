@@ -11,21 +11,9 @@ import { prisma } from '../app';
 import { UploadedFileModel } from '../models/uploaded-file-model';
 
 
-// const storage = multer.diskStorage({
-//     destination: function (req, file, cb) {
-//         cb(null, 'uploads/'); // Directory to store uploaded files
-//     },
-//     filename: function (req, file, cb) {
-//         cb(null, Date.now() + path.extname(file.originalname)); // Append timestamp to the filename
-//     },
-// });
-
-// const upload = multer({ storage });
-
 @JsonController('/api/posts')
 @UseBefore(Authorize)
 export class PostController {
-
 
     constructor(private postRepository: PostRepository) {
         this.postRepository = new PostRepository();
@@ -64,7 +52,7 @@ export class PostController {
 
     @Post('/upload/:postId')
     @HttpCode(StatusCodes.CREATED)
-    async postImageAsync(@Param('postId') postId: number, @UploadedFile("fileUpload") file: any) {
+    async postMediaFileAsync(@Param('postId') postId: number, @UploadedFile("fileUpload") file: any) {
         try {
 
             const uploadedFile = prisma.uploadedFile.create({
@@ -80,6 +68,27 @@ export class PostController {
         }
         catch (error) {
 
+        }
+    }
+
+    @Get('/download/:id')
+    async getMediaFileAsync(@Param('id') id: number, @Res() response: Response): Promise<any> {
+        try {
+            const image = await prisma.uploadedFile.findUnique({
+                where: {
+                    id: id
+                },
+            });
+
+            const buffer = Buffer.from(image!.data!);
+
+            // Convert the Buffer to a Base64 string
+            const base64String = buffer.toString('base64');
+
+            return base64String;
+        }
+        catch (error) {
+            response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Failed to retrieve an image' });
         }
     }
 
@@ -101,10 +110,9 @@ export class PostController {
     };
 
     @Delete('/:id')
-    @HttpCode(StatusCodes.NO_CONTENT)
     async deleteAsync(@Param('id') id: number, @Res() response: any): Promise<any> {
         try {
-            const deletedFeedback = this.postRepository.deleteAsync(id);
+            const deletedFeedback = await this.postRepository.deleteAsync(id);
 
             return deletedFeedback;
         }
