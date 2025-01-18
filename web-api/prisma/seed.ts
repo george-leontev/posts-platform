@@ -10,7 +10,7 @@ async function main() {
     await prisma.$executeRaw`truncate table admin.user cascade`;
     await prisma.$executeRaw`insert into admin.user (email, password, avatar) VALUES ('user@example.com', ${await bcrypt.hash('1234567890', 10)}, 'avatar.png')`;
 
-    await prisma.$executeRaw`insert into business.post (user_id, topic, message, created_at, updated_at) VALUES (1, 'My life', 'My hollyday', ${new Date()}, ${new Date()})`;
+    await prisma.$executeRaw`insert into business.post (user_id, topic, message, created_at, updated_at) VALUES (1, 'My life', 'My holyday', ${new Date()}, ${new Date()})`;
     await prisma.$executeRaw`insert into business.post (user_id, topic, message, created_at, updated_at) VALUES (1, 'My life', 'My weekdays', ${new Date()}, ${new Date()})`;
 }
 

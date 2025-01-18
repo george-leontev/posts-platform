@@ -29,9 +29,9 @@ export class PostRepository {
         return newPost;
     };
 
-    async updateAsync(id: number, post: PostModel) {
+    async updateAsync(post: PostModel) {
         const existingPost = await prisma.post.findUnique({
-            where: { id: id },
+            where: { id: post.id },
         });
 
         if (!existingPost) {
@@ -39,7 +39,14 @@ export class PostRepository {
         }
 
         const updatedPost = await prisma.post.update({
-            where: { id: id },
+            where: { id: post.id },
+            include: {
+                uploadedFiles: {
+                  select: {
+                    id: true,
+                  },
+                },
+              },
             data: {
                 ...post,
                 updatedAt: new Date(), // Update the timestamp

@@ -1,4 +1,4 @@
-import { Body, Delete, Get, HttpCode, JsonController, Param, Post, Put, Req, Res, UploadedFile, UseBefore } from 'routing-controllers';
+import { Body, Delete, Get, HttpCode, JsonController, Param, Post, Put, Req, Res, UseBefore } from 'routing-controllers';
 import { Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { PostRepository } from '../repositories/post-repository';
@@ -8,7 +8,6 @@ import { PostModel } from '../models/post-model';
 import { UserModel } from '../models/user-model';
 import { AuthUser } from '../decorators/auth-user';
 import { prisma } from '../app';
-import { UploadedFileModel } from '../models/uploaded-file-model';
 
 
 @JsonController('/api/posts')
@@ -17,6 +16,24 @@ export class PostController {
 
     constructor(private postRepository: PostRepository) {
         this.postRepository = new PostRepository();
+    }
+
+    @Get('/:id')
+    async getAsync(@Param('id') id: number, @Res() response: Response): Promise<any> {
+        try {
+            const post = await prisma.post.findUnique(
+                {
+                    where: {
+                        id: id
+                    }
+                }
+            );
+
+            return post
+        }
+        catch (error) {
+            response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Failed to retrieve posts' });
+        }
     }
 
     @Get()
@@ -50,54 +67,12 @@ export class PostController {
         }
     };
 
-    @Post('/upload/:postId')
-    @HttpCode(StatusCodes.CREATED)
-    async postMediaFileAsync(@Param('postId') postId: number, @UploadedFile("fileUpload") file: any) {
+    @Put()
+    async updateAsync(@Body() post: PostModel, @Res() response: any): Promise<any> {
         try {
+            const updatedPost = await this.postRepository.updateAsync(post);
 
-            const uploadedFile = prisma.uploadedFile.create({
-                data: {
-                    data: file.buffer,
-                    fileName: file.originalname,
-                    mimeType: file.mimetype,
-                    postId: postId
-                } as UploadedFileModel
-            });
-
-            return { ...uploadedFile, data: null };
-        }
-        catch (error) {
-
-        }
-    }
-
-    @Get('/download/:id')
-    async getMediaFileAsync(@Param('id') id: number, @Res() response: Response): Promise<any> {
-        try {
-            const image = await prisma.uploadedFile.findUnique({
-                where: {
-                    id: id
-                },
-            });
-
-            const buffer = Buffer.from(image!.data!);
-
-            // Convert the Buffer to a Base64 string
-            const base64String = buffer.toString('base64');
-
-            return base64String;
-        }
-        catch (error) {
-            response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Failed to retrieve an image' });
-        }
-    }
-
-    @Put('/:id')
-    async updateAsync(@Param('id') id: number, @Body() feedback: PostModel, @Res() response: any): Promise<any> {
-        try {
-            const updatedFeedback = await this.postRepository.updateAsync(id, feedback);
-
-            return updatedFeedback;
+            return updatedPost;
         }
         catch (error: any) {
             console.error(error);

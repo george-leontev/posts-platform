@@ -11,6 +11,7 @@ import { PostController } from './controllers/post-controller';
 import { RootController } from './controllers/root-controller';
 import { UserController } from './controllers/user-controller';
 import { AuthController } from './controllers/auth-controller';
+import { UploadedFileController } from './controllers/uploaded-file-controller';
 
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
@@ -22,7 +23,7 @@ const app = createExpressServer({
     origin: ['http://localhost:5000'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
   },
-  controllers: [RootController, AuthController, UserController, PostController]
+  controllers: [RootController, AuthController, UserController, PostController, UploadedFileController]
 });
 
 app.use(express.json());

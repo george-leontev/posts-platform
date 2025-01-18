@@ -4,3 +4,9 @@ export type PostModel = {
     message: string;
     uploadedFiles?: { id: number }[];
 }
+
+export const defaultPost = {
+    id: 0,
+    topic: '',
+    message: '',
+} as PostModel;

@@ -3,24 +3,36 @@ import { PostModel } from '../models/post-model';
 import { useAuthHttpRequest } from './use-auth-http-request';
 import routes from '../constants/app-api-routes';
 import { HttpConstants } from '../constants/app-http-constants';
-import { AxiosResponse } from 'axios';
+import { UploadedFileModel } from '../models/uploaded-file-model';
 
 export type AppDataContextModel = {
     getPostsAsync: () => Promise<PostModel[] | undefined>,
     addPostAsync: (post: PostModel) => Promise<PostModel | undefined>,
-    uploadMediaFileAsync: (postId: number, formData: FormData) => Promise<PostModel | undefined>,
-    downloadMediaFileAsync: (id: number) => Promise<AxiosResponse<any, any> | undefined>,
     deletePostAsync: (id: number) => Promise<any>,
-    editPostAsync: (id: number) => Promise<any>
+    updatePostAsync: (updatedPost: PostModel) => Promise<PostModel | undefined>,
+    getPostAsync: (postId: number) => Promise<PostModel | undefined>,
+    addUploadedFileAsync: (postId: number, formData: FormData) => Promise<UploadedFileModel | undefined>,
+    getUploadedFileAsync: (id: number) => Promise<string | undefined>,
+    getAllUploadedFilesAsync: (postId: number) => Promise<{ id: number }[] | undefined>
 }
 
 const AppDataContext = createContext({} as AppDataContextModel);
 
 export type AppDataContextProviderProps = object
 
-
 function AppDataContextProvider(props: AppDataContextProviderProps) {
     const authHttpRequest = useAuthHttpRequest();
+
+    const getPostAsync = useCallback(async (postId: number) => {
+        const response = await authHttpRequest({
+            method: 'GET',
+            url: `${routes.posts}/${postId}`
+        });
+
+        if (response && response.status == HttpConstants.StatusCodes.Ok) {
+            return response.data as PostModel;
+        }
+    }, [authHttpRequest]);
 
     const getPostsAsync = useCallback(async () => {
         try {
@@ -29,7 +41,7 @@ function AppDataContextProvider(props: AppDataContextProviderProps) {
                 url: routes.posts
             });
 
-            if (response && response.status === 200) {
+            if (response && response.status === HttpConstants.StatusCodes.Ok) {
                 return response.data as PostModel[];
             }
         } catch (error) {
@@ -53,15 +65,16 @@ function AppDataContextProvider(props: AppDataContextProviderProps) {
         }
     }, [authHttpRequest]);
 
-    const editPostAsync = useCallback(async (id: number) => {
+    const updatePostAsync = useCallback(async (updatedPost: PostModel) => {
         try {
             const response = await authHttpRequest({
                 method: HttpConstants.Methods.Put,
-                url: `${routes.posts}/${id}`
+                url: `${routes.posts}`,
+                data: updatedPost
             });
 
             if (response && response.status === HttpConstants.StatusCodes.Ok) {
-                return response.data;
+                return response.data as PostModel;
             }
         } catch (error) {
             console.log(error);
@@ -84,36 +97,55 @@ function AppDataContextProvider(props: AppDataContextProviderProps) {
         }
     }, [authHttpRequest]);
 
-    const uploadMediaFileAsync = useCallback(async (postId: number, formData: FormData) => {
+    const addUploadedFileAsync = useCallback(async (postId: number, formData: FormData) => {
         try {
             const response = await authHttpRequest({
                 method: HttpConstants.Methods.Post,
-                url: `${routes.posts}/upload/${postId}`,
+                url: `${routes.uploadedFiles}/${postId}`,
                 headers: { 'Content-Type': 'multipart/form-data' },
                 data: formData,
             });
 
             if (response && response.status === HttpConstants.StatusCodes.Created) {
-                return response.data as PostModel;
+                return response.data as UploadedFileModel;
             }
         } catch (error) {
             console.log(error);
         }
     }, [authHttpRequest]);
 
-    const downloadMediaFileAsync = useCallback(async (id: number) => {
+    const getUploadedFileAsync = useCallback(async (id: number) => {
         const response = await authHttpRequest({
-            url: `${routes.posts}/download/${id}`,
+            url: `${routes.uploadedFiles}/${id}`,
             method: HttpConstants.Methods.Get,
         });
 
         if (response && response.status === HttpConstants.StatusCodes.Ok) {
-            debugger;
-            return response;
+            return response.data as string;
         }
     }, [authHttpRequest])
 
-    return <AppDataContext.Provider { ...props } value={ { getPostsAsync, addPostAsync, editPostAsync, deletePostAsync, uploadMediaFileAsync, downloadMediaFileAsync } } />
+    const getAllUploadedFilesAsync = useCallback(async (postId: number) => {
+        const response = await authHttpRequest({
+            url: `${routes.uploadedFiles}/list/${postId}`,
+            method: HttpConstants.Methods.Get,
+        });
+
+        if (response && response.status === HttpConstants.StatusCodes.Ok) {
+            return response.data as { id: number }[];
+        }
+    }, [authHttpRequest])
+
+    return <AppDataContext.Provider { ...props } value={ {
+        getPostAsync,
+        getPostsAsync,
+        addPostAsync,
+        updatePostAsync,
+        deletePostAsync,
+        addUploadedFileAsync,
+        getUploadedFileAsync,
+        getAllUploadedFilesAsync
+    } } />
 }
 
 const useAppDataContext = () => useContext(AppDataContext);
