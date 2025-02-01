@@ -1,12 +1,18 @@
-import { prisma } from "../app";
-import { DuplicateEntityError } from "../errors/duplicate-entity-error";
-import { UserModel } from "../models/user-model";
+import { PrismaClient } from "@prisma/client";
+import { DuplicateEntityException } from "../../errors/duplicate-entity-exeption";
+import { UserModel } from "./models/user-model";
 import bcrypt from 'bcrypt';
+import { Injectable, OnModuleInit } from "@nestjs/common";
 
-export class UserRepository {
+@Injectable()
+export class UsersRepository extends PrismaClient implements OnModuleInit {
+
+    async onModuleInit() {
+        await this.$connect();
+    }
 
     async getAsync(id: number): Promise<UserModel | null> {
-        const user = await prisma.user.findUnique({
+        const user = await this.user.findUnique({
             where: { id: id },
         });
 
@@ -14,7 +20,7 @@ export class UserRepository {
     }
 
     async getByEmail(email: string): Promise<UserModel | null> {
-        const user = await prisma.user.findUnique({
+        const user = await this.user.findUnique({
             where: { email: email }
         });
 
@@ -25,23 +31,23 @@ export class UserRepository {
     /**
      * Creates a new user in the database
      * @param {UserModel} user - The user object containing user info.
-     * @throws {DuplicateEntityError} - Throws an error if the user already exists.
+     * @throws {DuplicateEntityException} - Throws an error if the user already exists.
      * @returns {Promise<UserModel>} Returns the created user object.
      */
     async createAsync(user: UserModel): Promise<UserModel> {
-        const existingUser = await prisma.user.findUnique({
+        const existingUser = await this.user.findUnique({
             where: { email: user.email },
         });
 
         if (existingUser) {
-            throw new DuplicateEntityError('User already exists');
+            throw new DuplicateEntityException('User already exists');
         }
 
         // Hash the user's password before storing
         const saltRounds = 10
         const hashedPassword = await bcrypt.hash(user.password, saltRounds);
 
-        const newUser = await prisma.user.create({
+        const newUser = await this.user.create({
             data: {
                 ...user,
                 password: hashedPassword,
