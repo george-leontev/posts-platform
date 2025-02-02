@@ -1,10 +1,26 @@
-import { Body, Controller, Delete, Get, InternalServerErrorException, NotFoundException, OnModuleInit, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
-import { PostModel } from "./models/post-model";
-import { PostsRepository } from "./posts.repository";
-import { ApiBearerAuth } from "@nestjs/swagger";
-import { NotFoundEntityExeption } from "../../errors/not-found-entity-exeption";
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    InternalServerErrorException,
+    NotFoundException,
+    Param,
+    ParseIntPipe,
+    Post,
+    Request,
+    Put,
+    UseGuards
+} from "@nestjs/common";
+import {PostModel} from "./models/post-model";
+import {PostsRepository} from "./posts.repository";
+import {ApiBearerAuth, ApiBody} from "@nestjs/swagger";
+import {NotFoundEntityExeption} from "../../errors/not-found-entity-exeption";
+import {AuthGuard} from "../auth/auth.guard";
+import {AuthUserModel} from "../auth/models/auth-user-model";
 
 @ApiBearerAuth()
+@UseGuards(AuthGuard)
 @Controller('api/posts')
 export class PostsController {
 
@@ -26,12 +42,17 @@ export class PostsController {
         return posts;
     }
 
+    @ApiBody({
+        type: PostModel
+    })
     @Post()
     async postAsync(
         @Body() post: PostModel,
+        @Request() req: any,
     ): Promise<any> {
-        // TODO: recode this
-        const newPost = await this.postsRepository.createAsync({ ...post, userId: 1 });
+        const newPost = await this.postsRepository.createAsync(
+            {...post, userId: (req.user as AuthUserModel).userId}
+        );
 
         return newPost;
     };
@@ -42,8 +63,7 @@ export class PostsController {
             const updatedPost = await this.postsRepository.updateAsync(post);
 
             return updatedPost;
-        }
-        catch (error: any) {
+        } catch (error: any) {
             console.error(error);
             if (error instanceof NotFoundEntityExeption) {
                 throw new NotFoundException(error.message);
@@ -59,8 +79,7 @@ export class PostsController {
             const deletedFeedback = await this.postsRepository.deleteAsync(id);
 
             return deletedFeedback;
-        }
-        catch (error: any) {
+        } catch (error: any) {
             if (error instanceof NotFoundEntityExeption) {
                 throw new NotFoundException(error.message);
             }

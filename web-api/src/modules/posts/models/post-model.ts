@@ -1,4 +1,5 @@
-export type PostModel = {
+// @ts-nocheck
+export class PostModel {
     id: number;
     topic: string;
     message: string;
