@@ -46,8 +46,8 @@ function AuthProvider(props: AppBaseProviderProps) {
             const response = await axios.post(
                 `${routes.host}${routes.accountSignIn}`, signIn
             );
-
-            if (response && response.status === HttpConstants.StatusCodes.Ok && response.data) {
+            debugger
+            if (response && response.status === HttpConstants.StatusCodes.Created && response.data) {
                 userAuthData = response.data;
                 if (userAuthData) {
                     localStorage.setItem('@userAuthData', JSON.stringify(userAuthData));
@@ -92,14 +92,14 @@ function AuthProvider(props: AppBaseProviderProps) {
 
     return (
         <AuthContext.Provider
-            value={ {
+            value={{
                 user,
                 signIn,
                 signOut,
                 getUserAuthDataFromStorage,
                 isAuthenticated
-            } }
-            { ...props }
+            }}
+            {...props}
         />
     );
 }

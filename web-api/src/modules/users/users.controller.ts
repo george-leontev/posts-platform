@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, InternalServerErrorException, NotFoundException, Param, Post } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Get, InternalServerErrorException, NotFoundException, Param, ParseIntPipe, Post } from "@nestjs/common";
 import { UsersRepository } from "./users.repository";
 import { UserModel } from "./models/user-model";
 import { DuplicateEntityException } from "../../errors/duplicate-entity-exeption";
@@ -14,7 +14,7 @@ export class UsersController {
     }
 
     @Get(':id')
-    async getAsync(@Param('id') id: number) {
+    async getAsync(@Param('id', ParseIntPipe) id: number) {
 
         const user = await this.userRepository.getAsync(id);
 

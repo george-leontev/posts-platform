@@ -8,16 +8,16 @@ import {
     Param,
     ParseIntPipe,
     Post,
-    Request,
     Put,
     UseGuards
 } from "@nestjs/common";
-import {PostModel} from "./models/post-model";
-import {PostsRepository} from "./posts.repository";
-import {ApiBearerAuth, ApiBody} from "@nestjs/swagger";
-import {NotFoundEntityExeption} from "../../errors/not-found-entity-exeption";
-import {AuthGuard} from "../auth/auth.guard";
-import {AuthUserModel} from "../auth/models/auth-user-model";
+import { PostModel } from "./models/post-model";
+import { PostsRepository } from "./posts.repository";
+import { ApiBearerAuth, ApiBody } from "@nestjs/swagger";
+import { NotFoundEntityExeption } from "../../errors/not-found-entity-exeption";
+import { AuthGuard } from "../auth/auth.guard";
+import { AuthUserModel } from "../auth/models/auth-user-model";
+import { User } from "../../common/decorators/user.decorator";
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
@@ -48,10 +48,11 @@ export class PostsController {
     @Post()
     async postAsync(
         @Body() post: PostModel,
-        @Request() req: any,
+        @User() user: AuthUserModel,
     ): Promise<any> {
+
         const newPost = await this.postsRepository.createAsync(
-            {...post, userId: (req.user as AuthUserModel).userId}
+            { ...post, userId: user.userId }
         );
 
         return newPost;
@@ -64,7 +65,6 @@ export class PostsController {
 
             return updatedPost;
         } catch (error: any) {
-            console.error(error);
             if (error instanceof NotFoundEntityExeption) {
                 throw new NotFoundException(error.message);
             }
@@ -74,7 +74,7 @@ export class PostsController {
     };
 
     @Delete('/:id')
-    async deleteAsync(@Param('id') id: number) {
+    async deleteAsync(@Param('id', ParseIntPipe) id: number) {
         try {
             const deletedFeedback = await this.postsRepository.deleteAsync(id);
 

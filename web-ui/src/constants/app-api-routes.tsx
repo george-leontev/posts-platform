@@ -3,5 +3,5 @@ export default {
     accountSignIn: '/auth/sign-in',
     accountSignOut: '/auth/sign-out',
     posts: '/api/posts',
-    uploadedFiles: 'api/uploaded-files'
+    uploadedFiles: '/api/upload'
 };

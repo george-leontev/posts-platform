@@ -1,8 +1,11 @@
-import { Controller, Get, Param, Post, Res, UploadedFile } from "@nestjs/common";
+import { Controller, Get, Param, ParseIntPipe, Post, Res, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { UploadRepository } from "./upload.repository";
-import { ApiBearerAuth } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiConsumes } from "@nestjs/swagger";
+import { AuthGuard } from "../auth/auth.guard";
+import { FileInterceptor } from "@nestjs/platform-express";
 
 @ApiBearerAuth()
+@UseGuards(AuthGuard)
 @Controller('/api/upload')
 export class UploadController {
 
@@ -11,14 +14,14 @@ export class UploadController {
     }
 
     @Get('/list/:postId')
-    async getAllAsync(@Param('postId') id: number) {
+    async getAllAsync(@Param('postId', ParseIntPipe) id: number) {
         const files = await this.uploadRepository.getAllAsync(id);
 
         return files;
     }
 
     @Get('/:id')
-    async getAsync(@Param('id') id: number, @Res() response: Response): Promise<any> {
+    async getAsync(@Param('id', ParseIntPipe) id: number): Promise<any> {
         const image = await this.uploadRepository.getAsync(id);
 
         if (image) {
@@ -31,7 +34,9 @@ export class UploadController {
     }
 
     @Post('/:postId')
-    async postAsync(@Param('postId') postId: number, @UploadedFile("fileUpload") file: any) {
+    @ApiConsumes('multipart/form-data')
+    @UseInterceptors(FileInterceptor('fileUpload'))
+    async postAsync(@Param('postId', ParseIntPipe) postId: number, @UploadedFile() file: Express.Multer.File) {
         const uploadedFile = this.uploadRepository.postAsync(postId, file);
 
         return { ...uploadedFile, data: null };

@@ -40,9 +40,8 @@ export class PostsRepository extends PrismaClient implements OnModuleInit {
     };
 
     async createAsync(post: PostModel) {
-
         const newPost = await this.post.create({
-            data: { ...post }
+            data: post
         });
 
         return newPost;
