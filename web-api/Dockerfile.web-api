@@ -14,6 +14,6 @@ RUN tsc
 RUN rm -rf ./src
 RUN mv ./dist/src ./
 RUN rm -rf ./dist
-COPY ./src/swagger.yaml ./src
+# COPY ./src/swagger.yaml ./src
 
 EXPOSE 3000

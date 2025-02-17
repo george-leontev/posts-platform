@@ -9,6 +9,7 @@ CREATE TABLE "admin"."user" (
     "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
+    "username" TEXT NOT NULL,
     "avatar" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -40,6 +41,9 @@ CREATE TABLE "business"."uploaded_file" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "user_email_key" ON "admin"."user"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "user_username_key" ON "admin"."user"("username");
 
 -- AddForeignKey
 ALTER TABLE "business"."post" ADD CONSTRAINT "post_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "admin"."user"("id") ON DELETE CASCADE ON UPDATE CASCADE;

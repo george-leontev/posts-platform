@@ -1,7 +1,7 @@
-import { Injectable, OnModuleInit } from "@nestjs/common";
-import { PrismaClient } from "@prisma/client";
-import { PostModel } from "./models/post-model";
-import { NotFoundEntityExeption } from "../../errors/not-found-entity-exeption";
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
+import { PostModel } from './models/post-model';
+import { NotFoundEntityException } from '../../errors/not-found-entity-exception';
 
 @Injectable()
 export class PostsRepository extends PrismaClient implements OnModuleInit {
@@ -12,40 +12,54 @@ export class PostsRepository extends PrismaClient implements OnModuleInit {
     async getAsync(id: number) {
         const post = await this.post.findUnique({
             where: {
-                id: id
-            }
+                id: id,
+            },
         });
 
         if (!post) {
-            throw new NotFoundEntityExeption('Post not found.');
+            throw new NotFoundEntityException('Post not found.');
         }
 
         return post;
     }
 
     async getAllAsync() {
-        const posts = await this.post.findMany(
-            {
-                include: {
-                    uploadedFiles: {
-                        select: {
-                            id: true,
-                        },
+        const posts = await this.post.findMany({
+            include: {
+                author: {
+                    select: {
+                        id: true,
+                        email: true,
+                        username: true,
                     },
                 },
-            }
-        );
+                uploadedFiles: {
+                    select: {
+                        id: true,
+                    },
+                },
+            },
+        });
 
-        return posts
-    };
+        return posts;
+    }
 
     async createAsync(post: PostModel) {
         const newPost = await this.post.create({
-            data: post
+            data: post,
+            include: {
+                author: {
+                    select: {
+                        id: true,
+                        email: true,
+                        username: true,
+                    },
+                },
+            },
         });
 
         return newPost;
-    };
+    }
 
     async updateAsync(post: PostModel) {
         const existingPost = await this.post.findUnique({
@@ -53,7 +67,7 @@ export class PostsRepository extends PrismaClient implements OnModuleInit {
         });
 
         if (!existingPost) {
-            throw new NotFoundEntityExeption('Post not found.');
+            throw new NotFoundEntityException('Post not found.');
         }
 
         const updatedPost = await this.post.update({
@@ -64,6 +78,12 @@ export class PostsRepository extends PrismaClient implements OnModuleInit {
                         id: true,
                     },
                 },
+                author: {
+                    select: {
+                        email: true,
+                        username: true,
+                    },
+                },
             },
             data: {
                 ...post,
@@ -72,7 +92,7 @@ export class PostsRepository extends PrismaClient implements OnModuleInit {
         });
 
         return updatedPost;
-    };
+    }
 
     async deleteAsync(id: number) {
         const post = await this.post.delete({
@@ -80,9 +100,9 @@ export class PostsRepository extends PrismaClient implements OnModuleInit {
         });
 
         if (!post) {
-            throw new NotFoundEntityExeption('Post not found');
+            throw new NotFoundEntityException('Post not found');
         }
 
-        return post
+        return post;
     }
 }

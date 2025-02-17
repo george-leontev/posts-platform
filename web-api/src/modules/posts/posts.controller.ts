@@ -9,30 +9,27 @@ import {
     ParseIntPipe,
     Post,
     Put,
-    UseGuards
-} from "@nestjs/common";
-import { PostModel } from "./models/post-model";
-import { PostsRepository } from "./posts.repository";
-import { ApiBearerAuth, ApiBody } from "@nestjs/swagger";
-import { NotFoundEntityExeption } from "../../errors/not-found-entity-exeption";
-import { AuthGuard } from "../auth/auth.guard";
-import { AuthUserModel } from "../auth/models/auth-user-model";
-import { User } from "../../common/decorators/user.decorator";
+    UseGuards,
+} from '@nestjs/common';
+import { PostModel } from './models/post-model';
+import { PostsRepository } from './posts.repository';
+import { ApiBearerAuth, ApiBody } from '@nestjs/swagger';
+import { NotFoundEntityException } from '../../errors/not-found-entity-exception';
+import { AuthGuard } from '../auth/auth.guard';
+import { AuthUserModel } from '../auth/models/auth-user-model';
+import { User } from '../../common/decorators/user.decorator';
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
 @Controller('api/posts')
 export class PostsController {
-
-    constructor(private readonly postsRepository: PostsRepository) {
-
-    }
+    constructor(private readonly postsRepository: PostsRepository) {}
 
     @Get('/:id')
     async getAsync(@Param('id', ParseIntPipe) id: number) {
         const post = this.postsRepository.getAsync(id);
 
-        return post
+        return post;
     }
 
     @Get()
@@ -43,20 +40,14 @@ export class PostsController {
     }
 
     @ApiBody({
-        type: PostModel
+        type: PostModel,
     })
     @Post()
-    async postAsync(
-        @Body() post: PostModel,
-        @User() user: AuthUserModel,
-    ): Promise<any> {
-
-        const newPost = await this.postsRepository.createAsync(
-            { ...post, userId: user.userId }
-        );
+    async postAsync(@Body() post: PostModel, @User() user: AuthUserModel): Promise<any> {
+        const newPost = await this.postsRepository.createAsync({ ...post, userId: user.userId });
 
         return newPost;
-    };
+    }
 
     @Put()
     async updateAsync(@Body() post: PostModel) {
@@ -65,13 +56,13 @@ export class PostsController {
 
             return updatedPost;
         } catch (error: any) {
-            if (error instanceof NotFoundEntityExeption) {
+            if (error instanceof NotFoundEntityException) {
                 throw new NotFoundException(error.message);
             }
 
             throw new InternalServerErrorException(error.message);
         }
-    };
+    }
 
     @Delete('/:id')
     async deleteAsync(@Param('id', ParseIntPipe) id: number) {
@@ -80,10 +71,10 @@ export class PostsController {
 
             return deletedFeedback;
         } catch (error: any) {
-            if (error instanceof NotFoundEntityExeption) {
+            if (error instanceof NotFoundEntityException) {
                 throw new NotFoundException(error.message);
             }
-            throw new InternalServerErrorException(error.message)
+            throw new InternalServerErrorException(error.message);
         }
-    };
+    }
 }
