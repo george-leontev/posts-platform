@@ -93,6 +93,7 @@ function AppDataContextProvider(props: AppDataContextProviderProps) {
     const deletePostAsync = useCallback(
         async (id: number) => {
             try {
+                debugger
                 const response = await authHttpRequest({
                     method: HttpConstants.Methods.Delete,
                     url: `${routes.posts}/${id}`,

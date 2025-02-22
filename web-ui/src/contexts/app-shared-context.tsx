@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react';
-import { PostModel } from '../models/post-model';
+import { defaultPost, PostModel } from '../models/post-model';
 import { AppBaseProviderProps } from '../models/app-base-provider-props';
 
 export type AppSharedContextModel = {
@@ -25,7 +25,7 @@ function AppSharedContextProvider(props: AppBaseProviderProps) {
     const [posts, setPosts] = useState<PostModel[]>([]);
     const [currentPostId, setCurrentPostId] = useState<number>();
     const [isToastVisible, setIsToastVisible] = useState<boolean>(false);
-    const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
+    const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(true);
 
     return (
         <AppSharedContext.Provider
@@ -41,7 +41,7 @@ function AppSharedContextProvider(props: AppBaseProviderProps) {
                 isDrawerOpen,
                 setIsDrawerOpen,
                 isToastVisible,
-                setIsToastVisible
+                setIsToastVisible,
             }}
             {...props}
         />

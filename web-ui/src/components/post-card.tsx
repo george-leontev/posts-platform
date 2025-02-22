@@ -4,7 +4,7 @@ import { useAppDataContext } from '../contexts/app-data-context';
 import { MdDeleteSweep as DeleteIcon, MdOutlineModeEdit as EditIcon, MdImage as ImageIcon } from 'react-icons/md';
 import { useAppSharedContext } from '../contexts/app-shared-context';
 import { PostModel } from '../models/post-model';
-import { ConfirmationDialog } from '../dialogs/confirmation-dialog';
+import { ConfirmationDialog } from '../components/dialogs/confirmation-dialog';
 
 export const PostCard = ({ post }: { post: PostModel }) => {
     const [isImageVisible, setIsImageVisible] = useState(false);

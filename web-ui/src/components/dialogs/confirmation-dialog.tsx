@@ -1,16 +1,16 @@
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
+import { useCallback } from "react";
 import { CiWarning as WarningIcon } from "react-icons/ci";
-import { Dialog, DialogContent, DialogTitle, Button, DialogActions } from '@mui/material';
-import { useAppSharedContext } from '../contexts/app-shared-context';
-import { useCallback } from 'react';
-import { useAppDataContext } from '../contexts/app-data-context';
-import { PostModel } from '../models/post-model';
+import { useAppDataContext } from "../../contexts/app-data-context";
+import { useAppSharedContext } from "../../contexts/app-shared-context";
+import { PostModel } from "../../models/post-model";
 
 interface ConfirmationDialogProps {
     post: PostModel;
 }
 
 export const ConfirmationDialog = ({ post }: ConfirmationDialogProps) => {
-    const { setPosts, isConfirmationDialogVisible, setIsConfirmationDialogVisible } = useAppSharedContext();
+    const { setPosts, isConfirmationDialogVisible, setIsConfirmationDialogVisible} = useAppSharedContext();
     const { deletePostAsync } = useAppDataContext();
 
     const onCloseClickHandler = useCallback(() => {

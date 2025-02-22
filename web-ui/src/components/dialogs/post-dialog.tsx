@@ -1,8 +1,8 @@
 import { Dialog, DialogContent, TextField, DialogActions, Button,  Input, Typography } from '@mui/material';
-import { useAppSharedContext } from '../contexts/app-shared-context';
-import { useCallback, useEffect, useState } from 'react';
-import { useAppDataContext } from '../contexts/app-data-context';
-import { PostModel, defaultPost } from '../models/post-model';
+import { useState, useEffect, useCallback } from 'react';
+import { useAppDataContext } from '../../contexts/app-data-context';
+import { useAppSharedContext } from '../../contexts/app-shared-context';
+import { PostModel, defaultPost } from '../../models/post-model';
 
 export const PostDialog = () => {
     const [fileName, setFileName] = useState<string>('');
