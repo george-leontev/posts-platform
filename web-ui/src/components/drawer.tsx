@@ -6,7 +6,7 @@ export const TemporaryDrawer = () => {
     const { isDrawerOpen, setIsDrawerOpen } = useAppSharedContext();
 
     const DrawerList = (
-        <div className='w-[350px] p-2'>
+        <div className='w-[280px] p-2'>
             <IconButton className="h-14 w-14" onClick={() => setIsDrawerOpen(false)}>
                 <OpenedDrawerIcon className="h-8 w-8" />
             </IconButton>
@@ -34,7 +34,7 @@ export const TemporaryDrawer = () => {
     );
 
     return (
-        <div className="flex w-full justify-start">
+        <div className="flex w-[350px] justify-start">
             <Drawer variant="persistent" open={isDrawerOpen}>
                 {DrawerList}
             </Drawer>
