@@ -34,7 +34,7 @@ export const PostCard = ({ post }: { post: PostModel }) => {
     }, [post.id, setCurrentPostId, setIsDialogVisible]);
 
     return (
-        <div className="flex flex-col w-[600px] h-[260px] p-6 bg-white rounded-lg shadow-md">
+        <div className="flex flex-col w-[600px] h-[260px] p-6 rounded-lg shadow-md bg-white">
             <div className="flex flex-col gap-6">
                 <div className="flex items-center w-full">
                     <div className="flex flex-1 flex-col">

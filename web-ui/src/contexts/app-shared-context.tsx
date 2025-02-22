@@ -13,6 +13,8 @@ export type AppSharedContextModel = {
     setCurrentPostId: React.Dispatch<React.SetStateAction<number | undefined>>;
     isToastVisible: boolean;
     setIsToastVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    isDrawerOpen: boolean;
+    setIsDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const AppSharedContext = createContext({} as AppSharedContextModel);
@@ -23,6 +25,7 @@ function AppSharedContextProvider(props: AppBaseProviderProps) {
     const [posts, setPosts] = useState<PostModel[]>([]);
     const [currentPostId, setCurrentPostId] = useState<number>();
     const [isToastVisible, setIsToastVisible] = useState<boolean>(false);
+    const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
 
     return (
         <AppSharedContext.Provider
@@ -35,8 +38,10 @@ function AppSharedContextProvider(props: AppBaseProviderProps) {
                 setPosts,
                 currentPostId,
                 setCurrentPostId,
+                isDrawerOpen,
+                setIsDrawerOpen,
                 isToastVisible,
-                setIsToastVisible,
+                setIsToastVisible
             }}
             {...props}
         />
