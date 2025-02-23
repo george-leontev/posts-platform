@@ -1,4 +1,4 @@
-import { Dialog, IconButton, ImageListItem } from '@mui/material';
+import { Box, Dialog, IconButton, ImageListItem } from '@mui/material';
 import { MdDeleteSweep as DeleteIcon, MdOutlineModeEdit as EditIcon, MdImage as ImageIcon } from 'react-icons/md';
 import { useAppSharedContext } from '../contexts/app-shared-context';
 import { PostModel } from '../models/post-model';
@@ -44,10 +44,10 @@ export const PostActions = ({ post }: PostActionsProps) => {
     }, [setIsImageVisible]);
 
     return (
-        <>
+        <Box sx={{ color: 'primary.main' }}>
             <IconButton
                 className="w-[48px] h-[48px]"
-                sx={{ borderRadius: '100%', color: 'black' }}
+                sx={{ borderRadius: '100%' }}
                 onClick={() => setIsConfirmationDialogVisible(true)}
             >
                 <DeleteIcon size={20} />
@@ -55,7 +55,7 @@ export const PostActions = ({ post }: PostActionsProps) => {
 
             <IconButton
                 className="w-[48px] h-[48px]"
-                sx={{ borderRadius: '100%', color: 'black' }}
+                sx={{ borderRadius: '100%' }}
                 onClick={onEditPostHandler}
             >
                 <EditIcon size={20} />
@@ -64,7 +64,7 @@ export const PostActions = ({ post }: PostActionsProps) => {
             {post.uploadedFiles && post.uploadedFiles.length > 0 ? (
                 <IconButton
                     className="w-[48px] h-[48px]"
-                    sx={{ borderRadius: '100%', color: 'black' }}
+                    sx={{ borderRadius: '100%' }}
                     onClick={onShowImageClickHandler}
                 >
                     <ImageIcon size={20} />
@@ -79,6 +79,6 @@ export const PostActions = ({ post }: PostActionsProps) => {
                     <img src={imageSrc} />
                 </ImageListItem>
             </Dialog>
-        </>
+        </Box>
     );
 };

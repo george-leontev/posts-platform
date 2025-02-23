@@ -117,7 +117,7 @@ export const PostDialog = () => {
                             style={ { display: 'none' } }
                         />
                         <label htmlFor="file-upload">
-                            <Button variant="outlined" component="span">
+                            <Button sx={{color: 'white'}} variant="outlined" component="span">
                                 Choose File
                             </Button>
                         </label>

@@ -5,12 +5,15 @@ import { LuMessagesSquare as MessageIcon } from 'react-icons/lu';
 import { TbMessage2Heart as NotificationIcon } from 'react-icons/tb';
 import { RiFunctionAddLine as CreateIcon } from 'react-icons/ri';
 import { CgProfile as ProfileIcon } from 'react-icons/cg';
+import { TiFlashOutline as DarkModeIcon } from 'react-icons/ti';
+import { TiFlash as LightModeIcon } from 'react-icons/ti';
 import { Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import { useAppSharedContext } from '../contexts/app-shared-context';
 import { useCallback, useEffect } from 'react';
 
 export const TemporaryDrawer = () => {
-    const { isDrawerOpen, setIsDrawerOpen, isSmallScreen, setIsSmallScreen } = useAppSharedContext();
+    const { isDrawerOpen, setIsDrawerOpen, isSmallScreen, setIsSmallScreen, isDarkMode, setIsDarkMode } =
+        useAppSharedContext();
 
     const checkScreenSize = useCallback(() => {
         const screenWidth = window.innerWidth;
@@ -34,6 +37,11 @@ export const TemporaryDrawer = () => {
         { text: 'Notifications', icon: <NotificationIcon /> },
         { text: 'Create', icon: <CreateIcon /> },
         { text: 'Profile', icon: <ProfileIcon /> },
+        {
+            text: isDarkMode ? 'Dark mode' : 'Light mode',
+            icon: isDarkMode ? <DarkModeIcon /> : <LightModeIcon />,
+            onclick: () => setIsDarkMode((prevMode) => !prevMode),
+        },
     ];
 
     return (
@@ -41,6 +49,8 @@ export const TemporaryDrawer = () => {
             variant={isSmallScreen ? 'temporary' : 'persistent'}
             open={isDrawerOpen}
             onClose={() => setIsDrawerOpen(false)}
+            sx={{ backgroundColor: 'background.default' }}
+            className='absolute'
         >
             <div className="w-[280px] p-2">
                 <IconButton className="h-14 w-14" onClick={() => setIsDrawerOpen(false)}>
@@ -48,9 +58,9 @@ export const TemporaryDrawer = () => {
                 </IconButton>
 
                 <List>
-                    {drawerItems.map(({ text, icon }) => (
+                    {drawerItems.map(({ text, icon, onclick }) => (
                         <ListItem key={text} disablePadding>
-                            <ListItemButton className="flex gap-3 text-xl">
+                            <ListItemButton onClick={onclick} className="flex gap-3 text-xl">
                                 {icon}
                                 <ListItemText primary={text} />
                             </ListItemButton>

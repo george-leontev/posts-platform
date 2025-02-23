@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Dialog, IconButton, ImageListItem, Menu } from '@mui/material';
+import { Box, Dialog, IconButton, ImageListItem, Menu } from '@mui/material';
 import { useAppDataContext } from '../contexts/app-data-context';
 import { MdMoreVert as MoreIcon } from 'react-icons/md';
 import { useAppSharedContext } from '../contexts/app-shared-context';
@@ -25,7 +25,18 @@ export const PostCard = ({ post }: { post: PostModel }) => {
     }, [setMenuAnchor]);
 
     return (
-        <div className="flex flex-col sm:w-[500px] md:w-[550px] xl:w-[600px] min-h-[260px] p-6 rounded-lg shadow-md bg-white">
+        <Box
+            sx={{
+                minHeight: 260,
+                p: 2,
+                borderRadius: 2,
+                borderColor: 'white',
+                boxShadow: 3,
+                backgroundColor: 'background.paper',
+                color: 'text.primary',
+            }}
+            className="flex flex-col sm:w-[500px] md:w-[550px] xl:w-[600px] min-h-[260px] p-6 rounded-lg shadow-md bg-white"
+        >
             <div className="flex flex-col gap-6 ">
                 <div className="flex items-center w-full">
                     <div className="flex flex-1 flex-col">
@@ -51,10 +62,10 @@ export const PostCard = ({ post }: { post: PostModel }) => {
                         </div>
                     )}
                 </div>
-                <div className="h-[150px] overflow-auto text-gray-700">{post.message}</div>
+                <Box sx={{color: 'text.primary'}} className="h-[150px] overflow-auto">{post.message}</Box>
             </div>
 
             <ConfirmationDialog post={post} />
-        </div>
+        </Box>
     );
 };
