@@ -7,29 +7,25 @@ import { RiFunctionAddLine as CreateIcon } from 'react-icons/ri';
 import { CgProfile as ProfileIcon } from 'react-icons/cg';
 import { Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import { useAppSharedContext } from '../contexts/app-shared-context';
-import { useEffect, useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
 export const TemporaryDrawer = () => {
     const { isDrawerOpen, setIsDrawerOpen, isSmallScreen, setIsSmallScreen } = useAppSharedContext();
 
     const checkScreenSize = useCallback(() => {
         const screenWidth = window.innerWidth;
-        setIsSmallScreen(screenWidth < 1024);
-    }, [setIsSmallScreen]);
+        const smallScreen = screenWidth < 990;
+
+        setIsSmallScreen(smallScreen);
+        setIsDrawerOpen(!smallScreen);
+    }, [setIsDrawerOpen, setIsSmallScreen]);
 
     useEffect(() => {
         checkScreenSize();
 
-        if (isSmallScreen) {
-            setIsDrawerOpen(false);
-        } else {
-            setIsDrawerOpen(true);
-        }
-
         window.addEventListener('resize', checkScreenSize);
-
         return () => window.removeEventListener('resize', checkScreenSize);
-    }, [isSmallScreen, checkScreenSize]);
+    }, [checkScreenSize]);
 
     const drawerItems = [
         { text: 'Home', icon: <HomeIcon /> },

@@ -27,13 +27,16 @@ export const PostsPage = () => {
         })();
     }, [getPostsAsync, setPosts]);
 
+    const motionProps = isSmallScreen
+        ? {}
+        : {
+              initial: { marginLeft: isDrawerOpen ? 280 : 0 },
+              animate: { marginLeft: isDrawerOpen ? 280 : 0 },
+              transition: { duration: 0.5, ease: 'easeInOut' },
+          };
+
     return (
-        <motion.div
-            className="flex flex-col ml-[280px]"
-            initial={{ marginLeft: 280 }}
-            animate={{ marginLeft: isDrawerOpen && !isSmallScreen ? 280 : 0 }}
-            transition={{ duration: 0.5, ease: 'easeInOut' }}
-        >
+        <motion.div className="flex flex-col" {...motionProps}>
             <TemporaryDrawer />
             <div className="flex flex-col">
                 <Header />
@@ -57,7 +60,7 @@ export const PostsPage = () => {
                         })}
                     </div>
                 ) : (
-                    <div className="flex flex-col justify-center items-center h-screen w-screen">
+                    <div className="flex flex-col justify-center items-center h-screen">
                         <p className="text-xl text-[#8c8c91]">No posts yet😞</p>
                         <Button onClick={onDialogOpenClickHandler}>Be first</Button>
                     </div>

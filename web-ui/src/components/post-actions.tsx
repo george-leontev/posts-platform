@@ -1,4 +1,4 @@
-import { IconButton } from '@mui/material';
+import { Dialog, IconButton, ImageListItem } from '@mui/material';
 import { MdDeleteSweep as DeleteIcon, MdOutlineModeEdit as EditIcon, MdImage as ImageIcon } from 'react-icons/md';
 import { useAppSharedContext } from '../contexts/app-shared-context';
 import { PostModel } from '../models/post-model';
@@ -10,8 +10,15 @@ interface PostActionsProps {
 }
 
 export const PostActions = ({ post }: PostActionsProps) => {
-    const { setIsDialogVisible, setCurrentPostId, setIsConfirmationDialogVisible, setImageSrc, setIsImageVisible } =
-        useAppSharedContext();
+    const {
+        setIsDialogVisible,
+        setCurrentPostId,
+        setIsConfirmationDialogVisible,
+        imageSrc,
+        setImageSrc,
+        isImageVisible,
+        setIsImageVisible,
+    } = useAppSharedContext();
 
     const { getUploadedFileAsync, getAllUploadedFilesAsync } = useAppDataContext();
 
@@ -32,8 +39,12 @@ export const PostActions = ({ post }: PostActionsProps) => {
         }
     }, [getAllUploadedFilesAsync, getUploadedFileAsync, post.id]);
 
+    const onCloseImageClickHandler = useCallback(() => {
+        setIsImageVisible(false);
+    }, [setIsImageVisible]);
+
     return (
-        <div>
+        <>
             <IconButton
                 className="w-[48px] h-[48px]"
                 sx={{ borderRadius: '100%', color: 'black' }}
@@ -59,6 +70,15 @@ export const PostActions = ({ post }: PostActionsProps) => {
                     <ImageIcon size={20} />
                 </IconButton>
             ) : null}
-        </div>
+            <Dialog
+                open={isImageVisible}
+                onClose={onCloseImageClickHandler}
+                className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75"
+            >
+                <ImageListItem>
+                    <img src={imageSrc} />
+                </ImageListItem>
+            </Dialog>
+        </>
     );
 };

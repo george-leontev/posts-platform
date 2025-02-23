@@ -27,7 +27,7 @@ export const Header = () => {
             <div className="flex w-full">
                 <div className="flex flex-1 justify-center items-center w-full">
                     <TextField
-                        className="sm:w-[500px] lg:w-[550px] 2xl:w-[600px]"
+                        className="sm:w-[500px] lg:w-[550px] xl:w-[600px]"
                         label="What do you want to find?"
                         variant="outlined"
                         size="small"

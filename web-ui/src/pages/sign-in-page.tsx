@@ -30,7 +30,7 @@ export const SighInPage = () => {
                     animate={ { opacity: 1, y: 0 } }
                     exit={ { opacity: 0, y: 50 } }
                     transition={ { duration: 0.5 } }
-                    className="flex flex-col gap-6 w-full max-w-xl bg-gray-100 p-6 rounded-lg"
+                    className="flex flex-col gap-6 w-full max-w-[580px] bg-gray-100 p-6 rounded-lg"
                 >
                     <Typography variant="h4" component="h1" gutterBottom>
                         Sign In
