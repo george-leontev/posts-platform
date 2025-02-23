@@ -11,7 +11,7 @@ import { motion } from 'framer-motion';
 
 export const PostsPage = () => {
     const { getPostsAsync } = useAppDataContext();
-    const { setIsDialogVisible, setPosts, posts, isToastVisible, setIsToastVisible, isDrawerOpen } =
+    const { setIsDialogVisible, setPosts, posts, isToastVisible, setIsToastVisible, isDrawerOpen, isSmallScreen } =
         useAppSharedContext();
 
     const onDialogOpenClickHandler = useCallback(() => {
@@ -31,7 +31,7 @@ export const PostsPage = () => {
         <motion.div
             className="flex flex-col ml-[280px]"
             initial={{ marginLeft: 280 }}
-            animate={{ marginLeft: isDrawerOpen ? 280 : 0 }}
+            animate={{ marginLeft: isDrawerOpen && !isSmallScreen ? 280 : 0 }}
             transition={{ duration: 0.5, ease: 'easeInOut' }}
         >
             <TemporaryDrawer />

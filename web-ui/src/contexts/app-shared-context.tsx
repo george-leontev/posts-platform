@@ -15,6 +15,12 @@ export type AppSharedContextModel = {
     setIsToastVisible: React.Dispatch<React.SetStateAction<boolean>>;
     isDrawerOpen: boolean;
     setIsDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    isSmallScreen: boolean;
+    setIsSmallScreen: React.Dispatch<React.SetStateAction<boolean>>;
+    imageSrc: string | undefined;
+    setImageSrc: React.Dispatch<React.SetStateAction<string | undefined>>;
+    isImageVisible: boolean;
+    setIsImageVisible: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const AppSharedContext = createContext({} as AppSharedContextModel);
@@ -26,6 +32,9 @@ function AppSharedContextProvider(props: AppBaseProviderProps) {
     const [currentPostId, setCurrentPostId] = useState<number>();
     const [isToastVisible, setIsToastVisible] = useState<boolean>(false);
     const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(true);
+    const [isSmallScreen, setIsSmallScreen] = useState(false);
+    const [imageSrc, setImageSrc] = useState<string | undefined>();
+    const [isImageVisible, setIsImageVisible] = useState(false);
 
     return (
         <AppSharedContext.Provider
@@ -42,6 +51,12 @@ function AppSharedContextProvider(props: AppBaseProviderProps) {
                 setIsDrawerOpen,
                 isToastVisible,
                 setIsToastVisible,
+                isSmallScreen,
+                setIsSmallScreen,
+                imageSrc,
+                setImageSrc,
+                isImageVisible,
+                setIsImageVisible,
             }}
             {...props}
         />
