@@ -3,20 +3,13 @@ import { MdOutlineMenu as ClosedDrawerIcon } from 'react-icons/md';
 import { IconButton, TextField } from '@mui/material';
 import { useAppSharedContext } from '../contexts/app-shared-context';
 
-export const Header = () => {
+interface HeaderProps {
+    onSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    searchQuery: string;
+}
+
+export const Header = ({ onSearchChange, searchQuery }: HeaderProps) => {
     const { setIsDrawerOpen, isDrawerOpen } = useAppSharedContext();
-
-    // const onSearchChangeHandler = useCallback(
-    //     (event: any) => {
-    //         const value = event.target.value.toLowerCase();
-
-    //         const filteredPosts = posts.filter((post) => {
-    //             return post.topic.toLowerCase().includes(value) || post.message.toLowerCase().includes(value);
-    //         });
-    //         setFilteredPosts(filteredPosts);
-    //     },
-    //     [setFilteredPosts, posts],
-    // );
 
     return (
         <div className="flex pb-5">
@@ -32,6 +25,8 @@ export const Header = () => {
                         className="sm:w-[500px] lg:w-[550px] xl:w-[600px]"
                         label="What do you want to find?"
                         variant="outlined"
+                        onChange={onSearchChange}
+                        value={searchQuery}
                         size="small"
                     />
                 </div>
