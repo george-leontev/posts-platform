@@ -5,8 +5,8 @@ import { LuMessagesSquare as MessageIcon } from 'react-icons/lu';
 import { TbMessage2Heart as NotificationIcon } from 'react-icons/tb';
 import { RiFunctionAddLine as CreateIcon } from 'react-icons/ri';
 import { CgProfile as ProfileIcon } from 'react-icons/cg';
-import { TiFlashOutline as DarkModeIcon } from 'react-icons/ti';
-import { TiFlash as LightModeIcon } from 'react-icons/ti';
+import { TiFlashOutline as LightModeIcon} from 'react-icons/ti';
+import { TiFlash as DarkModeIcon  } from 'react-icons/ti';
 import { Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import { useAppSharedContext } from '../contexts/app-shared-context';
 import { useCallback, useEffect } from 'react';
@@ -38,7 +38,7 @@ export const TemporaryDrawer = () => {
         { text: 'Create', icon: <CreateIcon /> },
         { text: 'Profile', icon: <ProfileIcon /> },
         {
-            text: isDarkMode ? 'Dark mode' : 'Light mode',
+            text: isDarkMode ? 'Light mode' : 'Dark mode',
             icon: isDarkMode ? <DarkModeIcon /> : <LightModeIcon />,
             onclick: () => setIsDarkMode((prevMode) => !prevMode),
         },
@@ -50,13 +50,13 @@ export const TemporaryDrawer = () => {
             open={isDrawerOpen}
             onClose={() => setIsDrawerOpen(false)}
             sx={{ backgroundColor: 'background.default' }}
-            className='absolute'
         >
-            <div className="w-[280px] p-2">
+            <div className='flex items-center pl-2 pt-3'>
                 <IconButton className="h-14 w-14" onClick={() => setIsDrawerOpen(false)}>
                     <OpenedDrawerIcon className="h-8 w-8" />
                 </IconButton>
-
+            </div>
+            <div className="w-[280px] pl-2">
                 <List>
                     {drawerItems.map(({ text, icon, onclick }) => (
                         <ListItem key={text} disablePadding>

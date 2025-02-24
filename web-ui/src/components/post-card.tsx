@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Box, Dialog, IconButton, ImageListItem, Menu } from '@mui/material';
-import { useAppDataContext } from '../contexts/app-data-context';
+import { Box, IconButton, Menu } from '@mui/material';
 import { MdMoreVert as MoreIcon } from 'react-icons/md';
 import { useAppSharedContext } from '../contexts/app-shared-context';
 import { PostModel } from '../models/post-model';
@@ -30,17 +29,19 @@ export const PostCard = ({ post }: { post: PostModel }) => {
                 minHeight: 260,
                 p: 2,
                 borderRadius: 2,
-                borderColor: 'white',
+                borderColor: 'primary.main',
                 boxShadow: 3,
                 backgroundColor: 'background.paper',
                 color: 'text.primary',
             }}
-            className="flex flex-col sm:w-[500px] md:w-[550px] xl:w-[600px] min-h-[260px] p-6 rounded-lg shadow-md bg-white"
+            className="flex flex-col sm:w-[500px] md:w-[550px] xl:w-[600px] min-h-[260px] p-6 rounded-lg shadow-md"
         >
             <div className="flex flex-col gap-6 ">
                 <div className="flex items-center w-full">
                     <div className="flex flex-1 flex-col">
-                        <p className="text-[#8c8c91] cursor-pointer hover:text-gray-600">{post.author.username}</p>
+                        <p className="text-[#8c8c91] cursor-pointer hover:text-gray-600 w-fit">
+                            {post.author.username}
+                        </p>
                         <p className="text-xl font-bold">{post.topic}</p>
                     </div>
                     {isSmallScreen ? (
@@ -62,7 +63,9 @@ export const PostCard = ({ post }: { post: PostModel }) => {
                         </div>
                     )}
                 </div>
-                <Box sx={{color: 'text.primary'}} className="h-[150px] overflow-auto">{post.message}</Box>
+                <Box sx={{ color: 'text.primary' }} className="h-[150px] overflow-auto">
+                    {post.message}
+                </Box>
             </div>
 
             <ConfirmationDialog post={post} />

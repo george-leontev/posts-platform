@@ -37,7 +37,7 @@ function AppSharedContextProvider(props: AppBaseProviderProps) {
     const [imageSrc, setImageSrc] = useState<string | undefined>();
     const [isImageVisible, setIsImageVisible] = useState<boolean>(false);
     const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false);
-    const [isDarkMode, setIsDarkMode] = useState(false);
+    const [isDarkMode, setIsDarkMode] = useState(true);
 
     return (
         <AppSharedContext.Provider

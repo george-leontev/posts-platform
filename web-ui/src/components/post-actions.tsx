@@ -14,9 +14,7 @@ export const PostActions = ({ post }: PostActionsProps) => {
         setIsDialogVisible,
         setCurrentPostId,
         setIsConfirmationDialogVisible,
-        imageSrc,
         setImageSrc,
-        isImageVisible,
         setIsImageVisible,
     } = useAppSharedContext();
 
@@ -39,15 +37,11 @@ export const PostActions = ({ post }: PostActionsProps) => {
         }
     }, [getAllUploadedFilesAsync, getUploadedFileAsync, post.id]);
 
-    const onCloseImageClickHandler = useCallback(() => {
-        setIsImageVisible(false);
-    }, [setIsImageVisible]);
-
     return (
         <Box sx={{ color: 'primary.main' }}>
             <IconButton
                 className="w-[48px] h-[48px]"
-                sx={{ borderRadius: '100%' }}
+                sx={{ borderRadius: '100%', color: 'primary.main' }}
                 onClick={() => setIsConfirmationDialogVisible(true)}
             >
                 <DeleteIcon size={20} />
@@ -55,7 +49,7 @@ export const PostActions = ({ post }: PostActionsProps) => {
 
             <IconButton
                 className="w-[48px] h-[48px]"
-                sx={{ borderRadius: '100%' }}
+                sx={{ borderRadius: '100%', color: 'primary.main' }}
                 onClick={onEditPostHandler}
             >
                 <EditIcon size={20} />
@@ -64,21 +58,12 @@ export const PostActions = ({ post }: PostActionsProps) => {
             {post.uploadedFiles && post.uploadedFiles.length > 0 ? (
                 <IconButton
                     className="w-[48px] h-[48px]"
-                    sx={{ borderRadius: '100%' }}
+                    sx={{ borderRadius: '100%', color: 'primary.main' }}
                     onClick={onShowImageClickHandler}
                 >
                     <ImageIcon size={20} />
                 </IconButton>
             ) : null}
-            <Dialog
-                open={isImageVisible}
-                onClose={onCloseImageClickHandler}
-                className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75"
-            >
-                <ImageListItem>
-                    <img src={imageSrc} />
-                </ImageListItem>
-            </Dialog>
         </Box>
     );
 };
