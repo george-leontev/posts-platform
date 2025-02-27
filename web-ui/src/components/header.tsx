@@ -9,7 +9,7 @@ interface HeaderProps {
 }
 
 export const Header = ({ onSearchChange, searchQuery }: HeaderProps) => {
-    const { setIsDrawerOpen, isDrawerOpen } = useAppSharedContext();
+    const { setIsDrawerOpen, isDrawerOpen, isSmallScreen } = useAppSharedContext();
 
     return (
         <div className="flex pb-5">
@@ -19,7 +19,7 @@ export const Header = ({ onSearchChange, searchQuery }: HeaderProps) => {
 
             <div className="flex w-full">
                 <div
-                    className={`flex flex-1 justify-center items-center transition-all duration-500 ${isDrawerOpen ? 'pl-[280px]' : 'pl-0'}`}
+                    className={`flex flex-1 justify-center items-center transition-all duration-500 ${(isDrawerOpen && !isSmallScreen) ? 'pl-[280px]' : 'pl-0'}`}
                 >
                     <TextField
                         className="sm:w-[500px] lg:w-[550px] xl:w-[600px]"

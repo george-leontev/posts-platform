@@ -1,4 +1,4 @@
-import { Box, Dialog, IconButton, ImageListItem } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import { MdDeleteSweep as DeleteIcon, MdOutlineModeEdit as EditIcon, MdImage as ImageIcon } from 'react-icons/md';
 import { useAppSharedContext } from '../contexts/app-shared-context';
 import { PostModel } from '../models/post-model';

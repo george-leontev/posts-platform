@@ -61,7 +61,7 @@ function AppSharedContextProvider(props: AppBaseProviderProps) {
                 isImageVisible,
                 setIsImageVisible,
                 isDarkMode,
-                setIsDarkMode
+                setIsDarkMode,
             }}
             {...props}
         />
